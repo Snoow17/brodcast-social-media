@@ -1,5 +1,7 @@
 ﻿using BrodcastSocialMedia.Data;
+using BrodcastSocialMedia.Models;
 using BrodcastSocialMedia.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +11,12 @@ namespace BrodcastSocialMedia.Controllers
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(ApplicationDbContext dbContext)
+        public UsersController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(UsersIndexViewModel viewModel)
@@ -25,6 +29,23 @@ namespace BrodcastSocialMedia.Controllers
             }
             
 
+
+            return View(viewModel);
+        }
+
+        [Route("/Users/{id}")]
+        public async Task<IActionResult> ShowUser(string id)
+        {
+            var broadcasts = await _dbContext.Broadcasts.Where(b => b.User.Id == id)
+                .OrderByDescending(b => b.Published)
+                .ToListAsync();
+            var user = await _userManager.GetUserAsync(User);
+
+            var viewModel = new UsersShowUserViewModel()
+            {
+                Broadcasts = broadcasts,
+                User = user
+            };
 
             return View(viewModel);
         }
