@@ -28,7 +28,6 @@ namespace BrodcastSocialMedia.Controllers
 
             if (user == null)
             {
-                // Show a generic home page with no user-specific data
                 return View(new HomeIndexViewModel
                 {
                     Broadcasts = new List<Broadcast>()
