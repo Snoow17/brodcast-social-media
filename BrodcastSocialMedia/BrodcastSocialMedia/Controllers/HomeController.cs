@@ -25,6 +25,16 @@ namespace BrodcastSocialMedia.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                // Show a generic home page with no user-specific data
+                return View(new HomeIndexViewModel
+                {
+                    Broadcasts = new List<Broadcast>()
+                });
+            }
+
             var dbUser = await _dbContext.Users.Where(u => u.Id == user.Id).FirstOrDefaultAsync();
 
             var broadcasts = await _dbContext.Users.Where(u => u.Id == user.Id)
