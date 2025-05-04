@@ -16,6 +16,11 @@
             <input type="hidden" name="UserId" value="@Model.User.Id" />
             <input type="submit" value="Listen to" />
         </form>
+
+        <form asp-controller="Users" asp-action="UnlistenToUser" method="post">
+            <input type="hidden" name="UserId" value="@Model.User.Id" />
+            <button type="submit">Unlisten</button>
+        </form>
     }
 
     @foreach (var broadcast in Model.Broadcasts)

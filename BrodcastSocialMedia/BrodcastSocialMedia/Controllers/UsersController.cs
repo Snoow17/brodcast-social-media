@@ -64,5 +64,23 @@ namespace BrodcastSocialMedia.Controllers
 
             return Redirect("/");
         }
+
+        [HttpPost, Route("/Users/Unlisten")]
+        public async Task<IActionResult> UnlistenToUser(UsersListenToUserViewModel viewModel)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(User);
+            var userToUnlisten = await _dbContext.Users
+                .Where(u => u.Id == viewModel.UserId)
+                .FirstOrDefaultAsync();
+
+            if (loggedInUser.ListeningTo.Contains(userToUnlisten))
+            {
+                loggedInUser.ListeningTo.Remove(userToUnlisten);
+                await _userManager.UpdateAsync(loggedInUser);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return Redirect("/");
+        }
     }
 }
