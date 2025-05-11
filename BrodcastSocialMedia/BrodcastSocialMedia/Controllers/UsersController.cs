@@ -12,11 +12,13 @@ namespace BrodcastSocialMedia.Controllers
 
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _env;
 
-        public UsersController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public UsersController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, IWebHostEnvironment env)
         {
             _dbContext = dbContext;
             _userManager = userManager;
+            _env = env;
         }
 
         public async Task<IActionResult> Index(UsersIndexViewModel viewModel)
@@ -82,5 +84,7 @@ namespace BrodcastSocialMedia.Controllers
 
             return Redirect("/");
         }
+
+        
     }
 }

@@ -8,10 +8,12 @@
 
     <h2>New Brodcast</h2>
 
-    <form action="/Home/Broadcast" method="post">
-        <textarea name="Message"></textarea> <br />
-        <input type="submit" value="Post" />
+    <form asp-action="Broadcast" method="post" enctype="multipart/form-data">
+        <textarea asp-for="Message" placeholder="Say something..."></textarea>
+        <input type="file" asp-for="Image" />
+        <button type="submit">Broadcast</button>
     </form>
+
 
     <hr />
 
@@ -26,5 +28,13 @@
             </b>:
             @broadcast.Message
         </p>
+
+        @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
+        {
+            <div>
+                <img src="@broadcast.ImageUrl" alt="Broadcast image" width="300" />
+            </div>
+        }
+
     }
 </div>

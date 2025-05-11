@@ -66,17 +66,39 @@ namespace BrodcastSocialMedia.Controllers
         public async Task<IActionResult> Broadcast(HomeBroadcastViewModel viewModel)
         {
             var user = await _userManager.GetUserAsync(User);
-            var broadcast = new Broadcast()
+
+            string? imagePath = null;
+
+            if (viewModel.Image != null && viewModel.Image.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                Directory.CreateDirectory(uploadsFolder); // Ensure directory exists
+
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.Image.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await viewModel.Image.CopyToAsync(stream);
+                }
+
+                imagePath = "/uploads/" + uniqueFileName;
+            }
+
+            var broadcast = new Broadcast
             {
                 Message = viewModel.Message,
-                User = user
+                User = user,
+                ImageUrl = imagePath,
+                Published = DateTime.UtcNow
             };
 
             _dbContext.Broadcasts.Add(broadcast);
-
             await _dbContext.SaveChangesAsync();
 
-            return Redirect("/");
+            return RedirectToAction("Index");
         }
+
+
     }
 }

@@ -1,0 +1,7 @@
+﻿@model ProfileIndexViewModel
+
+<form asp-controller="Profile" asp-action="UploadProfileImage" method="post" enctype="multipart/form-data">
+    <label>Upload Profile Picture:</label>
+    <input asp-for="ProfileImage" type="file" />
+    <button type="submit">Upload</button>
+</form>

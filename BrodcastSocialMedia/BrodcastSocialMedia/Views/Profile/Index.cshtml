@@ -7,4 +7,22 @@
         <input value="@Model.Name" name="Name" placeholder="Name" />
         <input type="submit" value="Save" />
     </form>
+
+    <form asp-action="ProfileImage" method="post" enctype="multipart/form-data">
+        <label>Upload profile picture:</label>
+        <input asp-for="ProfileImageUrl" type="file" />
+        <button type="submit">Upload</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+    {
+        <div>
+            <img src="@Model.ProfileImageUrl" alt="Profile Image" width="200" />
+        </div>
+    }
+    else
+    {
+        <p>No profile image uploaded yet.</p>
+    }
+
 </div>

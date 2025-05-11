@@ -6,5 +6,7 @@ namespace BrodcastSocialMedia.ViewModels
     public class HomeIndexViewModel
     {
         public List<Broadcast> Broadcasts { get; set; }
+        public string Message { get; set; }
+        public IFormFile? Image { get; set; } // For broadcast image
     }
 }
