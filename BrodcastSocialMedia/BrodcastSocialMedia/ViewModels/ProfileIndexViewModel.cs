@@ -6,7 +6,7 @@ namespace BrodcastSocialMedia.ViewModels
     {
         [Required]
         public string Name { get; set; }
-        public IFormFile? ProfileImage { get; set; }  // This is required for file upload
+        public IFormFile? ProfileImage { get; set; } 
         public string ProfileImageUrl { get; set; }
     }
 

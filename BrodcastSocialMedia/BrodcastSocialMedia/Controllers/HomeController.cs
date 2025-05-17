@@ -81,7 +81,7 @@ namespace BrodcastSocialMedia.Controllers
             if (viewModel.Image != null && viewModel.Image.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                Directory.CreateDirectory(uploadsFolder); // Ensure directory exists
+                Directory.CreateDirectory(uploadsFolder);
 
                 var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.Image.FileName);
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -136,7 +136,7 @@ namespace BrodcastSocialMedia.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            // Get updated count
+            
             var likeCount = await _dbContext.BroadcastLikes
                 .CountAsync(bl => bl.BroadcastId == broadcastId);
 

@@ -74,10 +74,10 @@
 
                 const result = await response.json();
 
-                // Update like count
+                
                 button.querySelector(".like-count").innerText = result.likeCount;
 
-                // Toggle heart icon
+                
                 const icon = button.querySelector("i");
                 icon.className = result.isLiked ? "fa fa-heart" : "fa fa-heart-o";
             }
