@@ -1,0 +1,8 @@
+﻿@model List<string>
+<h3>Liked by:</h3>
+<ul>
+    @foreach (var user in Model)
+    {
+        <li>@user</li>
+    }
+</ul>

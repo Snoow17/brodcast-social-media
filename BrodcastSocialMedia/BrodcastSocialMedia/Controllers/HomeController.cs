@@ -30,22 +30,31 @@ namespace BrodcastSocialMedia.Controllers
             {
                 return View(new HomeIndexViewModel
                 {
-                    Broadcasts = new List<Broadcast>()
+                    Broadcasts = new List<BroadcastViewModel>()
                 });
             }
 
-            var dbUser = await _dbContext.Users.Where(u => u.Id == user.Id).FirstOrDefaultAsync();
-
-            var broadcasts = await _dbContext.Users.Where(u => u.Id == user.Id)
+            var broadcasts = await _dbContext.Users
+                .Where(u => u.Id == user.Id)
                 .SelectMany(u => u.ListeningTo)
                 .SelectMany(u => u.Broadcasts)
                 .Include(b => b.User)
+                .Include(b => b.Likes)
                 .OrderByDescending(b => b.Published)
                 .ToListAsync();
 
-            var viewModel = new HomeIndexViewModel()
+            var viewModel = new HomeIndexViewModel
             {
-                Broadcasts = broadcasts
+                Broadcasts = broadcasts.Select(b => new BroadcastViewModel
+                {
+                    Id = b.Id,
+                    Message = b.Message,
+                    ImageUrl = b.ImageUrl,
+                    Published = b.Published,
+                    UserName = b.User.Name,
+                    LikeCount = b.Likes.Count,
+                    IsLikedByCurrentUser = b.Likes.Any(l => l.UserId == user.Id)
+                }).ToList()
             };
 
             return View(viewModel);
@@ -98,6 +107,55 @@ namespace BrodcastSocialMedia.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleLike([FromBody] int broadcastId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var like = await _dbContext.BroadcastLikes
+                .FirstOrDefaultAsync(bl => bl.BroadcastId == broadcastId && bl.UserId == user.Id);
+
+            bool isLiked;
+
+            if (like != null)
+            {
+                _dbContext.BroadcastLikes.Remove(like);
+                isLiked = false;
+            }
+            else
+            {
+                _dbContext.BroadcastLikes.Add(new BroadcastLike
+                {
+                    BroadcastId = broadcastId,
+                    UserId = user.Id,
+                    LikedAt = DateTime.UtcNow
+                });
+                isLiked = true;
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            // Get updated count
+            var likeCount = await _dbContext.BroadcastLikes
+                .CountAsync(bl => bl.BroadcastId == broadcastId);
+
+            return Json(new { likeCount, isLiked });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLikers(int broadcastId)
+        {
+            var likers = await _dbContext.BroadcastLikes
+                .Where(bl => bl.BroadcastId == broadcastId)
+                .Include(bl => bl.User)
+                .Select(bl => bl.User.Name)
+                .ToListAsync();
+
+            return Json(likers);
+        }
+
+
 
 
     }

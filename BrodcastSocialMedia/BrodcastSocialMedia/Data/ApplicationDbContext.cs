@@ -14,5 +14,8 @@ namespace BrodcastSocialMedia.Data
 
 
         public DbSet<Broadcast> Broadcasts { get; set; }
+
+        public DbSet<BroadcastLike> BroadcastLikes { get; set; }
+
     }
 }

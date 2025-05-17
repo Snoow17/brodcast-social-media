@@ -8,5 +8,7 @@
         public DateTime Published { get; set; } = DateTime.Now;
         public string? ImageUrl { get; set; }
 
+        public ICollection<BroadcastLike> Likes { get; set; }
+
     }
 }

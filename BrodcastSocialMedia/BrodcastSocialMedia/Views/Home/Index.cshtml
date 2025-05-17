@@ -14,8 +14,7 @@
         <button type="submit">Broadcast</button>
     </form>
 
-
-    <hr />
+    
 
     <h2>Broadcasts</h2>
 
@@ -23,7 +22,7 @@
     {
         <p>
             <b>
-                @broadcast.User.Name 
+                @broadcast.UserName 
                 (@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString())
             </b>:
             @broadcast.Message
@@ -36,5 +35,74 @@
             </div>
         }
 
+        <button class="like-button"
+                data-broadcast-id="@broadcast.Id"
+                onclick="toggleLike(this)">
+            <i class="fa @(broadcast.IsLikedByCurrentUser ? "fa-heart" : "fa-heart-o")"></i>
+            <span class="like-count">@broadcast.LikeCount</span>
+        </button>
+
+        <a href="#" onclick="showLikersModal(@broadcast.Id); return false;">View all who liked</a>
+
+
+        <hr />
+
     }
+
+    <div id="likersModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%);
+     background:white; padding:20px; border:1px solid #ccc; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+        <h3>Liked by</h3>
+        <ul id="likersList"></ul>
+        <button onclick="closeLikersModal()">Close</button>
+    </div>
+
+    @section Scripts {
+        <script>
+            async function toggleLike(button) {
+                const broadcastId = button.getAttribute("data-broadcast-id");
+
+                const response = await fetch("/Home/ToggleLike", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    },
+                    body: JSON.stringify(broadcastId)
+                });
+
+                if (!response.ok) return;
+
+                const result = await response.json();
+
+                // Update like count
+                button.querySelector(".like-count").innerText = result.likeCount;
+
+                // Toggle heart icon
+                const icon = button.querySelector("i");
+                icon.className = result.isLiked ? "fa fa-heart" : "fa fa-heart-o";
+            }
+        </script>
+
+        <script>
+            async function showLikersModal(broadcastId) {
+                const response = await fetch(`/Home/GetLikers?broadcastId=${broadcastId}`);
+                const users = await response.json();
+
+                const list = document.getElementById("likersList");
+                list.innerHTML = "";
+                users.forEach(user => {
+                    const li = document.createElement("li");
+                    li.innerText = user;
+                    list.appendChild(li);
+                });
+
+                document.getElementById("likersModal").style.display = "block";
+            }
+
+            function closeLikersModal() {
+                document.getElementById("likersModal").style.display = "none";
+            }
+        </script>
+    }
+
 </div>
