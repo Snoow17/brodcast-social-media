@@ -3,10 +3,19 @@
 <div>
     <h1>Update profile</h1>
 
-    <form method="post" action="/Profile/Update">
-        <input value="@Model.Name" name="Name" placeholder="Name" />
-        <input type="submit" value="Save" />
+    <form asp-action="Update" method="post">
+        <label asp-for="Name">Username:</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+
+        <button type="submit">Save</button>
     </form>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 
     <form asp-action="ProfileImage" method="post" enctype="multipart/form-data">
         <label>Upload profile picture:</label>

@@ -34,6 +34,16 @@ namespace BrodcastSocialMedia.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
+            var usersWithSameName = _userManager.Users
+                .Where(u => u.Name == viewModel.Name && u.Id != user.Id)
+                .ToList();
+
+            if (usersWithSameName.Any())
+            {
+                ModelState.AddModelError("Name", "That username is already taken.");
+                return View("Index", viewModel);
+            }
+
             user.Name = viewModel.Name;
 
             await _userManager.UpdateAsync(user);
