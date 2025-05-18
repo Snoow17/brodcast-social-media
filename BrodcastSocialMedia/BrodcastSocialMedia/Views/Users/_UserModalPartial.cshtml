@@ -1,0 +1,24 @@
+﻿@model UsersShowUserViewModel
+
+<div>
+    <h5>@Model.User.Name's Profile</h5>
+
+    @if (Model.Broadcasts != null && Model.Broadcasts.Any())
+    {
+        <ul>
+            @foreach (var b in Model.Broadcasts.Take(3))
+            {
+                <li><strong>@b.Published.ToShortDateString()</strong>: @b.Message</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No recent broadcasts.</p>
+    }
+
+    <form action="/Users/Listen" method="post">
+        <input type="hidden" name="UserId" value="@Model.User.Id" />
+        <button type="submit" class="btn btn-success">Listen</button>
+    </form>
+</div>

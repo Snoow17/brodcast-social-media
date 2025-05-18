@@ -3,31 +3,46 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    var user = await UserManager.GetUserAsync(User);
-    ViewData["Title"] = Model.User.Name;
+    var currentUser = await UserManager.GetUserAsync(User);
+    var profileUser = Model?.User;
+    ViewData["Title"] = profileUser?.Name ?? "User Not Found";
 }
 
 <div>
-    <h1>Broadcasts from @Model.User.Name</h1>
-
-    @if (user.Id != Model.User.Id)
+    @if (profileUser == null)
     {
-        <form action="/Users/Listen" method="post">
-            <input type="hidden" name="UserId" value="@Model.User.Id" />
-            <input type="submit" value="Listen to" />
-        </form>
-
-        <form asp-controller="Users" asp-action="UnlistenToUser" method="post" onsubmit="return confirm('Are you sure you want to unlisten this user?');">
-            <input type="hidden" name="UserId" value="@Model.User.Id" />
-            <button type="submit">Unlisten</button>
-        </form>
+        <h1>User not found</h1>
     }
-
-    @foreach (var broadcast in Model.Broadcasts)
+    else
     {
-        <p>
-            <b>@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()</b>:
-            @broadcast.Message
-        </p>
+        <h1>Broadcasts from @profileUser.Name</h1>
+
+        @if (currentUser?.Id != profileUser.Id)
+        {
+            <form action="/Users/Listen" method="post">
+                <input type="hidden" name="UserId" value="@profileUser.Id" />
+                <input type="submit" value="Listen to" />
+            </form>
+
+            <form asp-controller="Users" asp-action="UnlistenToUser" method="post" onsubmit="return confirm('Are you sure you want to unlisten this user?');">
+                <input type="hidden" name="UserId" value="@profileUser.Id" />
+                <button type="submit">Unlisten</button>
+            </form>
+        }
+
+        @if (Model.Broadcasts != null && Model.Broadcasts.Any())
+        {
+            foreach (var broadcast in Model.Broadcasts)
+            {
+                <p>
+                    <b>@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()</b>:
+                    @broadcast.Message
+                </p>
+            }
+        }
+        else
+        {
+            <p>This user hasn't posted any broadcasts yet.</p>
+        }
     }
 </div>

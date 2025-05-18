@@ -35,7 +35,7 @@ namespace BrodcastSocialMedia.Controllers
             return View(viewModel);
         }
 
-        [Route("/Users/{id}")]
+        [Route("/Users/Details/{id}")]
         public async Task<IActionResult> ShowUser(string id)
         {
             var broadcasts = await _dbContext.Broadcasts.Where(b => b.User.Id == id)
@@ -85,6 +85,72 @@ namespace BrodcastSocialMedia.Controllers
             return Redirect("/");
         }
 
-        
+        [HttpGet]
+        [Route("/Users/Explore")]
+        public async Task<IActionResult> Explore()
+        {
+            var currentUser = await _dbContext.Users
+                .Include(u => u.ListeningTo)
+                .FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User));
+
+            if (currentUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var listeningToIds = currentUser.ListeningTo.Select(u => u.Id).ToHashSet();
+
+            var users = await _dbContext.Users
+                .Include(u => u.Broadcasts)
+                .Take(2)
+                .OrderByDescending(u => u.Broadcasts.Count)
+                .Select(u => new ExploreUserViewModel
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    BroadcastCount = u.Broadcasts.Count,
+                    ProfileImageUrl = "/images/default-profile.png"
+                })
+                .ToListAsync();
+
+            var viewModel = new ExploreViewModel
+            {
+                Users = users
+            };
+
+            Console.WriteLine($"Explore returning {users.Count} users");
+
+            return View("Explore", viewModel);
+        }
+
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserModal(string id)
+        {
+            var user = await _dbContext.Users
+                .Include(u => u.Broadcasts)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new UsersShowUserViewModel
+            {
+                User = user,
+                Broadcasts = user.Broadcasts
+                    .Where(b => b.Published != null)
+                    .OrderByDescending(b => b.Published)
+                    .ToList()
+            };
+
+            return PartialView("_UserModalPartial", model);
+        }
+
+
     }
 }

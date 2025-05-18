@@ -1,0 +1,77 @@
+﻿@model ExploreViewModel
+
+@{
+    ViewData["Title"] = "Explore";
+    var userCount = Model?.Users?.Count ?? 0;
+}
+
+<h2>Explore Popular Users</h2>
+
+@if (userCount == 0)
+{
+    <p>No active users found. Total: @userCount</p>
+}
+else
+{
+    <div class="user-list">
+        @foreach (var user in Model.Users)
+        {
+            <div class="user-card">
+                <img src="@user.ProfileImageUrl" alt="@user.Name's profile image" width="50" height="50" />
+                <strong>@user.Name</strong>
+                <p>@user.BroadcastCount broadcasts</p>
+
+                <!-- Button to open modal -->
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal"
+                        data-userid="@user.Id" data-username="@user.Name">
+                    View Profile
+                </button>
+            </div>
+        }
+    </div>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">User Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <p id="modalUsername">Loading...</p>
+                <form action="/Users/Listen" method="post">
+                    <input type="hidden" id="modalUserId" name="UserId" />
+                    <button type="submit" class="btn btn-success">Listen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const userModal = document.getElementById('userModal');
+        userModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-userid');
+
+            const modalBody = document.getElementById('modalContent');
+            modalBody.innerHTML = 'Loading user profile...';
+
+            fetch(`/Users/GetUserModal?id=${userId}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("User not found");
+                    return res.text();
+                })
+                .then(html => {
+                    modalBody.innerHTML = html;
+                })
+                .catch(err => {
+                    modalBody.innerHTML = '<p class="text-danger">Failed to load user details.</p>';
+                });
+        });
+    </script>
+}
+
