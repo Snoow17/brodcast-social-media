@@ -17,7 +17,7 @@
             <input type="submit" value="Listen to" />
         </form>
 
-        <form asp-controller="Users" asp-action="UnlistenToUser" method="post">
+        <form asp-controller="Users" asp-action="UnlistenToUser" method="post" onsubmit="return confirm('Are you sure you want to unlisten this user?');">
             <input type="hidden" name="UserId" value="@Model.User.Id" />
             <button type="submit">Unlisten</button>
         </form>

@@ -76,6 +76,35 @@ namespace BrodcastSocialMedia.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
+            if (!ModelState.IsValid)
+            {
+                var broadcasts = await _dbContext.Users
+                    .Where(u => u.Id == user.Id)
+                    .SelectMany(u => u.ListeningTo)
+                    .SelectMany(u => u.Broadcasts)
+                    .Include(b => b.User)
+                    .Include(b => b.Likes)
+                    .OrderByDescending(b => b.Published)
+                    .ToListAsync();
+
+                var model = new HomeIndexViewModel
+                {
+                    Broadcasts = broadcasts.Select(b => new BroadcastViewModel
+                    {
+                        Id = b.Id,
+                        Message = b.Message,
+                        ImageUrl = b.ImageUrl,
+                        Published = b.Published,
+                        UserName = b.User.Name,
+                        LikeCount = b.Likes.Count,
+                        IsLikedByCurrentUser = b.Likes.Any(l => l.UserId == user.Id)
+                    }).ToList()
+                };
+
+                ViewData["Error"] = "Message cannot be empty.";
+                return View("Index", model);
+            }
+
             string? imagePath = null;
 
             if (viewModel.Image != null && viewModel.Image.Length > 0)
