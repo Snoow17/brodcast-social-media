@@ -1,0 +1,17 @@
+﻿@model HomeIndexViewModel
+
+<h2>Top Broadcasts This Week</h2>
+
+@foreach (var broadcast in Model.Broadcasts)
+{
+    <div class="broadcast">
+        <h4>@broadcast.UserName</h4>
+        <p>@broadcast.Message</p>
+        @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
+        {
+            <img src="@broadcast.ImageUrl" alt="Broadcast image" style="max-width: 300px;" />
+        }
+        <p><strong>Likes:</strong> @broadcast.LikeCount</p>
+    </div>
+    <hr />
+}

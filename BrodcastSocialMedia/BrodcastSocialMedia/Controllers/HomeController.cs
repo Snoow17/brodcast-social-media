@@ -155,6 +155,40 @@ namespace BrodcastSocialMedia.Controllers
             return Json(likers);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> TopBroadcasts()
+        {
+            var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
+
+            var topBroadcasts = await _dbContext.Broadcasts
+                .Include(b => b.User)
+                .Include(b => b.Likes)
+                .Where(b => b.Likes.Any(l => l.LikedAt >= sevenDaysAgo))
+                .Select(b => new
+                {
+                    Broadcast = b,
+                    LikeCount = b.Likes.Count(l => l.LikedAt >= sevenDaysAgo)
+                })
+                .OrderByDescending(x => x.LikeCount)
+                .Take(10)
+                .ToListAsync();
+
+            var viewModel = new HomeIndexViewModel
+            {
+                Broadcasts = topBroadcasts.Select(x => new BroadcastViewModel
+                {
+                    Id = x.Broadcast.Id,
+                    Message = x.Broadcast.Message,
+                    ImageUrl = x.Broadcast.ImageUrl,
+                    Published = x.Broadcast.Published,
+                    UserName = x.Broadcast.User.Name,
+                    LikeCount = x.LikeCount,
+                    IsLikedByCurrentUser = x.Broadcast.Likes.Any(l => l.UserId == _userManager.GetUserId(User))
+                }).ToList()
+            };
+
+            return View("TopBroadcasts", viewModel);
+        }
 
 
 
