@@ -1,22 +1,167 @@
-html {
-  font-size: 14px;
+.custom-glass-navbar {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    mardign-top: 10%;
+    padding: 1rem;
+    position: fixed;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 2rem;
+    z-index: 1050;
+
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
+    .custom-glass-navbar .navbar-nav .nav-link,
+    .custom-glass-navbar .navbar-brand {
+        color: #fff !important;
+    }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
+        .custom-glass-navbar .nav-link:hover,
+        .custom-glass-navbar .navbar-brand:hover {
+            text-decoration: underline;
+        }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
 
 body {
-  margin-bottom: 60px;
+    background: url(https://wallpapercave.com/wp/VXFiGMn.jpg) no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card h5,
+.card p {
+    color: #fff;
+}
+
+
+.like-button {
+    background: none;
+    border: none;
+    padding: 0;
+    outline: none;
+    box-shadow: none;
+    margin-right: 10px;
+    color: #007bff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+    .like-button:focus,
+    .like-button:active {
+        outline: none;
+        box-shadow: none;
+    }
+
+    .like-button:hover {
+        transform: scale(1.1);
+        color: #0056b3;
+    }
+
+
+.heart-animate {
+    animation: pop 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.like-button .fa {
+    transition: color 0.2s ease;
+}
+
+.like-button .fa-heart {
+    color: #007bff;
+}
+
+.like-button.animate {
+    animation: bounce 0.3s ease-in-out;
+}
+
+.like-count {
+    margin-left: 5px;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #fff;
+}
+
+
+#likersModal .modal-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+.card img {
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+
+textarea:focus,
+input[type="file"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+
+.footer.fixed-bottom {
+    z-index: 1030;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
 }

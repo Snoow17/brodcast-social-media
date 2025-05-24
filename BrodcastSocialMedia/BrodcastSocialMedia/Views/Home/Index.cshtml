@@ -3,121 +3,147 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div class="container mt-5">
 
+    <div class="text-center mb-4">
+        <h1 class="display-4">Welcome</h1>
+    </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h2>New Broadcast</h2>
 
-    <h2>New Brodcast</h2>
-
-    <form asp-action="Broadcast" method="post" enctype="multipart/form-data">
-        <textarea asp-for="Message" placeholder="Say something..."></textarea>
-        <input type="file" asp-for="Image" />
-        <button type="submit">Broadcast</button>
+    <form asp-action="Broadcast" method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="mb-3">
+            <textarea asp-for="Message" class="form-control" rows="3" placeholder="Say something..."></textarea>
+        </div>
+        <div class="mb-3">
+            <input type="file" asp-for="Image" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Broadcast</button>
     </form>
 
     @if (ViewData["Error"] != null)
     {
-        <div class="alert alert-danger" role="alert" style="margin-top: 20px;">
+        <div class="alert alert-danger" role="alert">
             @ViewData["Error"]
         </div>
     }
 
-    
-
-    <h2>Broadcasts</h2>
+    <h2 class="mt-5">Broadcasts</h2>
 
     @foreach (var broadcast in Model.Broadcasts)
     {
-        <p>
-            <b>
-                @broadcast.UserName 
-                (@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString())
-            </b>:
-            @broadcast.Message
-        </p>
+        <div class="card mb-4 d-flex flex-column" style="min-height: 250px;">
+            <div class="card-body d-flex flex-column justify-content-between">
 
-        @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
-        {
-            <div>
-                <img src="@broadcast.ImageUrl" alt="Broadcast image" width="300" />
+                <div>
+                    <h5 class="card-title">
+                        @broadcast.UserName
+                        <small class="text-muted">
+                            (@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString())
+                        </small>
+                    </h5>
+
+                    <p class="card-text">@broadcast.Message</p>
+
+                    @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
+                    {
+                        <img src="@broadcast.ImageUrl" alt="Broadcast image" class="img-fluid rounded mb-3" />
+                    }
+                </div>
+
+                <div class="like-actions">
+                    <!-- Like (heart icon) -->
+                    <button class="btn btn-link p-0 like-button"
+                            data-broadcast-id="@broadcast.Id"
+                            onclick="toggleLike(this)">
+                        <i class="fa @(broadcast.IsLikedByCurrentUser ? "fa-heart text-primary" : "fa-heart-o") fa-lg"></i>
+                    </button>
+
+                    <!-- Like count (opens modal) -->
+                    <button class="btn btn-link p-0 text-decoration-none text-dark"
+                            onclick="showLikersModal(@broadcast.Id)">
+                        <span class="like-count">@broadcast.LikeCount</span> liked
+                    </button>
+                </div>
             </div>
-        }
-
-        <button class="like-button"
-                data-broadcast-id="@broadcast.Id"
-                onclick="toggleLike(this)">
-            <i class="fa @(broadcast.IsLikedByCurrentUser ? "fa-heart" : "fa-heart-o")"></i>
-            <span class="like-count">@broadcast.LikeCount</span>
-        </button>
-
-        <a href="#" onclick="showLikersModal(@broadcast.Id); return false;">View all who liked</a>
-
-
-        <hr />
-
+        </div>
     }
 
-    <div id="likersModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%);
-     background:white; padding:20px; border:1px solid #ccc; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
-        <h3>Liked by</h3>
-        <ul id="likersList"></ul>
-        <button onclick="closeLikersModal()">Close</button>
+    <!-- Likers Modal -->
+    <div id="likersModal" class="modal show" tabindex="-1" style="display:none;" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Liked by</h5>
+                    <button type="button" class="btn-close" onclick="closeLikersModal()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul id="likersList" class="list-unstyled"></ul>
+                </div>
+            </div>
+        </div>
     </div>
 
-    
-
-    @section Scripts {
-        <script>
-            async function toggleLike(button) {
-                const broadcastId = button.getAttribute("data-broadcast-id");
-
-                const response = await fetch("/Home/ToggleLike", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]')?.value
-                    },
-                    body: JSON.stringify(broadcastId)
-                });
-
-                if (!response.ok) return;
-
-                const result = await response.json();
-
-                
-                button.querySelector(".like-count").innerText = result.likeCount;
-
-                
-                const icon = button.querySelector("i");
-                icon.className = result.isLiked ? "fa fa-heart" : "fa fa-heart-o";
-            }
-        </script>
-
-        <script>
-            async function showLikersModal(broadcastId) {
-                const response = await fetch(`/Home/GetLikers?broadcastId=${broadcastId}`);
-                const users = await response.json();
-
-                const list = document.getElementById("likersList");
-                list.innerHTML = "";
-                users.forEach(user => {
-                    const li = document.createElement("li");
-                    li.innerText = user;
-                    list.appendChild(li);
-                });
-
-                document.getElementById("likersModal").style.display = "block";
-            }
-
-            function closeLikersModal() {
-                document.getElementById("likersModal").style.display = "none";
-            }
-        </script>
-
-        <script>
-            <partial name="_ValidationScriptsPartial" />
-        </script>
-    }
-
 </div>
+
+@section Scripts {
+    <script>
+        async function toggleLike(button) {
+            const broadcastId = button.getAttribute("data-broadcast-id");
+
+            const response = await fetch("/Home/ToggleLike", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify(broadcastId)
+            });
+
+            if (!response.ok) return;
+
+            const result = await response.json();
+
+            // Update like count
+            const broadcastCard = button.closest(".card-body");
+            const likeCountSpan = broadcastCard.querySelector(".like-count");
+            likeCountSpan.innerText = result.likeCount;
+
+            // Update heart icon
+            const icon = button.querySelector("i");
+            if (!icon) return;
+
+            icon.classList.remove("fa-heart", "fa-heart-o", "text-primary");
+            icon.classList.add(result.isLiked ? "fa-heart" : "fa-heart-o");
+            if (result.isLiked) {
+                icon.classList.add("text-primary");
+            }
+
+            icon.classList.add("heart-animate");
+            setTimeout(() => icon.classList.remove("heart-animate"), 300);
+        }
+
+        async function showLikersModal(broadcastId) {
+            const response = await fetch(`/Home/GetLikers?broadcastId=${broadcastId}`);
+            const users = await response.json();
+
+            const list = document.getElementById("likersList");
+            list.innerHTML = "";
+            users.forEach(user => {
+                const li = document.createElement("li");
+                li.innerText = user;
+                list.appendChild(li);
+            });
+
+            document.getElementById("likersModal").style.display = "block";
+        }
+
+        function closeLikersModal() {
+            document.getElementById("likersModal").style.display = "none";
+        }
+    </script>
+
+    <script>
+        <partial name="_ValidationScriptsPartial" />
+    </script>
+}
