@@ -62,14 +62,12 @@
                 </div>
 
                 <div class="like-actions">
-                    <!-- Like (heart icon) -->
                     <button class="btn btn-link p-0 like-button"
                             data-broadcast-id="@broadcast.Id"
                             onclick="toggleLike(this)">
                         <i class="fa @(broadcast.IsLikedByCurrentUser ? "fa-heart text-primary" : "fa-heart-o") fa-lg"></i>
                     </button>
 
-                    <!-- Like count (opens modal) -->
                     <button class="btn btn-link p-0 text-decoration-none text-dark"
                             onclick="showLikersModal(@broadcast.Id)">
                         <span class="like-count">@broadcast.LikeCount</span> liked
@@ -79,7 +77,6 @@
         </div>
     }
 
-    <!-- Likers Modal -->
     <div id="likersModal" class="modal show" tabindex="-1" style="display:none;" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -114,7 +111,6 @@
 
             const result = await response.json();
 
-            // Update like count
             const broadcastCard = button.closest(".card-body");
             const likeCountSpan = broadcastCard.querySelector(".like-count");
             likeCountSpan.innerText = result.likeCount;

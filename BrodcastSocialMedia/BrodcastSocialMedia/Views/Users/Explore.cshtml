@@ -21,7 +21,6 @@ else
                 <strong>@user.Name</strong>
                 <p>@user.BroadcastCount broadcasts</p>
 
-                <!-- Button to open modal -->
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal"
                         data-userid="@user.Id" data-username="@user.Name">
                     View Profile
@@ -31,7 +30,6 @@ else
     </div>
 }
 
-<!-- Modal -->
 <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
