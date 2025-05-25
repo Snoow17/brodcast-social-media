@@ -9,17 +9,27 @@
         <h1 class="display-4">Welcome</h1>
     </div>
 
-    <h2>New Broadcast</h2>
+    <h2 class="text-light">New Broadcast</h2>
 
-    <form asp-action="Broadcast" method="post" enctype="multipart/form-data" class="mb-4">
-        <div class="mb-3">
-            <textarea asp-for="Message" class="form-control" rows="3" placeholder="Say something..."></textarea>
+    <div class="card mb-4 new-broadcast-card">
+        <div class="card-body">
+            <form asp-action="Broadcast" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <textarea asp-for="Message" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Message"></span>
+                </div>
+                <div class="mb-3">
+                    <div class="custom-file-upload">
+                        <label for="ImageUpload" class="upload-label">
+                            <i class="fa fa-upload me-2"></i> Choose Image
+                        </label>
+                        <input type="file" asp-for="Image" id="ImageUpload" class="form-control-file" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Broadcast</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <input type="file" asp-for="Image" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary">Broadcast</button>
-    </form>
+    </div>
 
     @if (ViewData["Error"] != null)
     {
@@ -109,7 +119,6 @@
             const likeCountSpan = broadcastCard.querySelector(".like-count");
             likeCountSpan.innerText = result.likeCount;
 
-            // Update heart icon
             const icon = button.querySelector("i");
             if (!icon) return;
 
@@ -141,6 +150,11 @@
         function closeLikersModal() {
             document.getElementById("likersModal").style.display = "none";
         }
+
+            document.getElementById("ImageUpload").addEventListener("change", function () {
+            const fileName = this.files[0]?.name || "Choose Image";
+            document.querySelector("label[for='ImageUpload']").innerText = fileName;
+        });
     </script>
 
     <script>
