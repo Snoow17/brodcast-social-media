@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BrodcastSocialMedia.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace BrodcastSocialMedia.Models
+public class ApplicationUser : IdentityUser
 {
-    public class ApplicationUser : IdentityUser 
-    {
-        public string? Name { get; set; }
-        public string? ProfileImageUrl { get; set; }
+    public string? Name { get; set; }
+    public string? ProfileImageUrl { get; set; }
 
-        public ICollection<Broadcast> Broadcasts { get; set; }
+    public ICollection<Broadcast> Broadcasts { get; set; } = new List<Broadcast>();
 
-        public ICollection<ApplicationUser> ListeningTo { get; set; } = new List<ApplicationUser>();
-    }
+    public ICollection<UserListening> ListeningTo { get; set; } = new List<UserListening>();
+    public ICollection<UserListening> ListenedBy { get; set; } = new List<UserListening>();
 }

@@ -1,17 +1,27 @@
 ﻿@model HomeIndexViewModel
 
-<h2>Top Broadcasts This Week</h2>
+<div class="container mt-5 pt-5">
+    <h2 class="text-center mb-4">Top Broadcasts This Week</h2>
 
-@foreach (var broadcast in Model.Broadcasts)
-{
-    <div class="broadcast">
-        <h4>@broadcast.UserName</h4>
-        <p>@broadcast.Message</p>
-        @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
-        {
-            <img src="@broadcast.ImageUrl" alt="Broadcast image" style="max-width: 300px;" />
-        }
-        <p><strong>Likes:</strong> @broadcast.LikeCount</p>
-    </div>
-    <hr />
-}
+    @foreach (var broadcast in Model.Broadcasts)
+    {
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">@broadcast.UserName</h5>
+                <p class="card-text">@broadcast.Message</p>
+
+                @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
+                {
+                    <img src="@broadcast.ImageUrl" alt="Broadcast image" class="img-fluid rounded mt-3" style="max-height: 300px;" />
+                }
+
+                <div class="mt-3 d-flex align-items-center">
+                    <button class="like-button" aria-label="Like">
+                        <i class="fa fa-heart"></i>
+                    </button>
+                    <span class="like-count">@broadcast.LikeCount</span>
+                </div>
+            </div>
+        </div>
+    }
+</div>

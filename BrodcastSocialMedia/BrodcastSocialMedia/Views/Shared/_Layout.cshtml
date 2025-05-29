@@ -1,8 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    var tokens = Antiforgery.GetAndStoreTokens(Context);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
     <title>@ViewData["Title"] - BrodcastSocialMedia</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -44,7 +49,7 @@
     </header>
 
     <main role="main" class="flex-fill">
-        <div class="container pb-5">
+        <div class="container mt-5 pt-5 pb-5">
             @RenderBody()
         </div>
     </main>
@@ -55,10 +60,49 @@
         </div>
     </footer>
 
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        document.addEventListener("click", async function (e) {
+            const button = e.target.closest(".listen-btn");
+            if (!button) return;
+
+            const userId = button.getAttribute("data-userid");
+            const isListening = button.getAttribute("data-listening") === "true";
+            const token = document.querySelector('meta[name="request-verification-token"]')?.content;
+
+            const url = isListening ? "/Users/Unlisten" : "/Users/Listen";
+
+            try {
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken": token
+                    },
+                    body: JSON.stringify({ userId })
+                });
+
+                if (!res.ok) throw new Error("Failed to update");
+
+                // Update UI immediately
+                button.setAttribute("data-listening", (!isListening).toString());
+                button.classList.toggle("btn-danger", !isListening);
+                button.classList.toggle("btn-outline-light", isListening);
+                button.innerText = !isListening ? "🔕 Unlisten" : "🎧 Listen";
+            } catch (err) {
+                console.error(err);
+                alert("Something went wrong while updating listen state.");
+            }
+        });
+    </script>
+    
+    
+
+    <input type="hidden" id="__RequestVerificationToken" name="__RequestVerificationToken"
+           value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
 </body>
 </html>

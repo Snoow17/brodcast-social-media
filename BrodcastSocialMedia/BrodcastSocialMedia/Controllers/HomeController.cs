@@ -25,7 +25,6 @@ namespace BrodcastSocialMedia.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-
             if (user == null)
             {
                 return View(new HomeIndexViewModel
@@ -34,9 +33,9 @@ namespace BrodcastSocialMedia.Controllers
                 });
             }
 
-            var broadcasts = await _dbContext.Users
-                .Where(u => u.Id == user.Id)
-                .SelectMany(u => u.ListeningTo)
+            var broadcasts = await _dbContext.UserListenings
+                .Where(ul => ul.ListenerId == user.Id)
+                .Select(ul => ul.Target)
                 .SelectMany(u => u.Broadcasts)
                 .Include(b => b.User)
                 .Include(b => b.Likes)
@@ -78,9 +77,9 @@ namespace BrodcastSocialMedia.Controllers
 
             if (!ModelState.IsValid)
             {
-                var broadcasts = await _dbContext.Users
-                    .Where(u => u.Id == user.Id)
-                    .SelectMany(u => u.ListeningTo)
+                var broadcasts = await _dbContext.UserListenings
+                    .Where(ul => ul.ListenerId == user.Id)
+                    .Select(ul => ul.Target)
                     .SelectMany(u => u.Broadcasts)
                     .Include(b => b.User)
                     .Include(b => b.Likes)
@@ -165,7 +164,6 @@ namespace BrodcastSocialMedia.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            
             var likeCount = await _dbContext.BroadcastLikes
                 .CountAsync(bl => bl.BroadcastId == broadcastId);
 
@@ -187,6 +185,7 @@ namespace BrodcastSocialMedia.Controllers
         [HttpGet]
         public async Task<IActionResult> TopBroadcasts()
         {
+            var userId = _userManager.GetUserId(User);
             var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
 
             var topBroadcasts = await _dbContext.Broadcasts
@@ -212,14 +211,11 @@ namespace BrodcastSocialMedia.Controllers
                     Published = x.Broadcast.Published,
                     UserName = x.Broadcast.User.Name,
                     LikeCount = x.LikeCount,
-                    IsLikedByCurrentUser = x.Broadcast.Likes.Any(l => l.UserId == _userManager.GetUserId(User))
+                    IsLikedByCurrentUser = x.Broadcast.Likes.Any(l => l.UserId == userId)
                 }).ToList()
             };
 
             return View("TopBroadcasts", viewModel);
         }
-
-
-
     }
 }

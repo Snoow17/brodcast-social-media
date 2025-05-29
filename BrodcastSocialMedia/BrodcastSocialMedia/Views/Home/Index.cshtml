@@ -5,9 +5,7 @@
 
 <div class="container mt-5">
 
-    <div class="text-center mb-4">
-        <h1 class="display-4">Welcome</h1>
-    </div>
+    
 
     <h2 class="text-light">New Broadcast</h2>
 
@@ -77,15 +75,15 @@
         </div>
     }
 
-    <div id="likersModal" class="modal show" tabindex="-1" style="display:none;" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Liked by</h5>
-                    <button type="button" class="btn-close" onclick="closeLikersModal()" aria-label="Close"></button>
+    <div class="modal fade" id="likersModal" tabindex="-1" aria-labelledby="likersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-modal p-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white" id="likersModalLabel">Liked by</h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="closeLikersModal()" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <ul id="likersList" class="list-unstyled"></ul>
+                    <ul id="likersList" class="list-unstyled text-white mb-0"></ul>
                 </div>
             </div>
         </div>
@@ -128,24 +126,25 @@
             setTimeout(() => icon.classList.remove("heart-animate"), 300);
         }
 
-        async function showLikersModal(broadcastId) {
+                async function showLikersModal(broadcastId) {
             const response = await fetch(`/Home/GetLikers?broadcastId=${broadcastId}`);
             const users = await response.json();
 
             const list = document.getElementById("likersList");
             list.innerHTML = "";
+
             users.forEach(user => {
                 const li = document.createElement("li");
+                li.className = "list-group-item";
                 li.innerText = user;
                 list.appendChild(li);
             });
 
-            document.getElementById("likersModal").style.display = "block";
+                    const modal = new bootstrap.Modal(document.getElementById('likersModal'));
+        modal.show();
         }
 
-        function closeLikersModal() {
-            document.getElementById("likersModal").style.display = "none";
-        }
+        
 
             document.getElementById("ImageUpload").addEventListener("change", function () {
             const fileName = this.files[0]?.name || "Choose Image";

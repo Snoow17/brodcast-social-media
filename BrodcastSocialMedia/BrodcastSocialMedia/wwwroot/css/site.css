@@ -92,15 +92,15 @@ html, body {
     display: block;
 }
 
-    .login-card input:not([type="checkbox"]) {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 12px;
-        color: #fff;
-        padding: 0.75rem;
-        width: 100%;
-        transition: all 0.3s ease-in-out;
-    }
+.login-card input:not([type="checkbox"]) {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    color: #fff;
+    padding: 0.75rem;
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+}
 
 .login-card input:focus {
     background: rgba(255, 255, 255, 0.2);
@@ -440,4 +440,67 @@ textarea,
 input[type="file"],
 input[type="text"] {
     transition: all 0.3s ease;
+}
+
+.modal-content {
+    border-radius: 1rem;
+}
+
+#likersList .list-group-item {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+}
+
+.glass-modal {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+    .glass-modal .modal-title {
+        font-weight: 600;
+    }
+
+    .glass-modal .modal-body {
+        font-size: 1rem;
+    }
+
+.btn-close-white {
+    filter: invert(1);
+}
+
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.glass-modal .modal-body img {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.glass-modal .btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+    .glass-modal .btn-outline-light:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #fff;
+    }
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-content {
+    background: transparent !important;
 }
