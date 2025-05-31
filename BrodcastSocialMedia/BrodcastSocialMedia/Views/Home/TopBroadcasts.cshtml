@@ -7,7 +7,14 @@
     {
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title">@broadcast.UserName</h5>
+                <div class="d-flex align-items-center mb-2">
+                    <img src="@(string.IsNullOrEmpty(broadcast.ProfileImageUrl) ? "/uploads/default-profile.png" : broadcast.ProfileImageUrl)"
+                         alt="Profile Picture"
+                         class="rounded-circle me-2"
+                         style="width: 40px; height: 40px;" />
+
+                    <h5 class="mb-0">@broadcast.UserName</h5>
+                </div>
                 <p class="card-text">@broadcast.Message</p>
 
                 @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
@@ -16,12 +23,49 @@
                 }
 
                 <div class="mt-3 d-flex align-items-center">
-                    <button class="like-button" aria-label="Like">
-                        <i class="fa fa-heart"></i>
+                    <button class="btn btn-link p-0 like-button"
+                            data-broadcast-id="@broadcast.Id"
+                            onclick="toggleLike(this)">
+                        <i class="fa @(broadcast.IsLikedByCurrentUser ? "fa-heart text-primary" : "fa-heart-o") fa-lg"></i>
                     </button>
-                    <span class="like-count">@broadcast.LikeCount</span>
+                    <span class="like-count ms-2">@broadcast.LikeCount</span>
                 </div>
             </div>
         </div>
     }
 </div>
+
+<script>
+    async function toggleLike(button) {
+        const broadcastId = button.getAttribute("data-broadcast-id");
+
+        const response = await fetch("/Home/ToggleLike", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: JSON.stringify(broadcastId)
+        });
+
+        if (!response.ok) return;
+
+        const result = await response.json();
+
+        const broadcastCard = button.closest(".card-body");
+        const likeCountSpan = broadcastCard.querySelector(".like-count");
+        likeCountSpan.innerText = result.likeCount;
+
+        const icon = button.querySelector("i");
+        if (!icon) return;
+
+        icon.classList.remove("fa-heart", "fa-heart-o", "text-primary");
+        icon.classList.add(result.isLiked ? "fa-heart" : "fa-heart-o");
+        if (result.isLiked) {
+            icon.classList.add("text-primary");
+        }
+
+        icon.classList.add("heart-animate");
+        setTimeout(() => icon.classList.remove("heart-animate"), 300);
+    }
+</script>

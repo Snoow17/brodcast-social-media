@@ -176,7 +176,12 @@ namespace BrodcastSocialMedia.Controllers
             var likers = await _dbContext.BroadcastLikes
                 .Where(bl => bl.BroadcastId == broadcastId)
                 .Include(bl => bl.User)
-                .Select(bl => bl.User.Name)
+                .Select(bl => new {
+                    name = bl.User.Name,
+                    profileImageUrl = string.IsNullOrEmpty(bl.User.ProfileImageUrl)
+                        ? "/uploads/default-profile.png"
+                        : bl.User.ProfileImageUrl
+                })
                 .ToListAsync();
 
             return Json(likers);

@@ -49,19 +49,18 @@ body {
     background: rgba(255, 255, 255, 0.15) !important;
 }
 
-    .custom-glass-navbar .navbar-nav .nav-link,
-    .custom-glass-navbar .navbar-brand {
-        color: #fff !important;
-    }
+.custom-glass-navbar .navbar-nav .nav-link,
+.custom-glass-navbar .navbar-brand {
+    color: #fff !important;
+}
 
-        .custom-glass-navbar .nav-link:hover,
-        .custom-glass-navbar .navbar-brand:hover {
-            text-decoration: underline;
-        }
+.custom-glass-navbar .nav-link:hover,
+.custom-glass-navbar .navbar-brand:hover {
+    text-decoration: underline;
+}
 
 /* Inputs */
-.custom-input,
-textarea.form-control {
+.custom-input, textarea.form-control {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -70,21 +69,19 @@ textarea.form-control {
     transition: all 0.3s ease-in-out;
 }
 
-    .custom-input:focus,
-    textarea.form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
-        outline: none;
-        background: rgba(255, 255, 255, 0.2);
-    }
+.custom-input:focus, textarea.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+}
 
-    textarea.form-control::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-    }
+textarea.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
 
 /* Cards */
-.card,
-.new-broadcast-card {
+.card, .new-broadcast-card {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
@@ -95,11 +92,10 @@ textarea.form-control {
     transition: all 0.3s ease;
 }
 
-    .card:hover,
-    .new-broadcast-card:hover {
-        box-shadow: 0 16px 40px rgba(0, 123, 255, 0.5);
-        transform: translateY(-2px);
-    }
+.card:hover, .new-broadcast-card:hover {
+    box-shadow: 0 16px 40px rgba(0, 123, 255, 0.5);
+    transform: translateY(-2px);
+}
 
 .card-body {
     padding: 1.5rem;
@@ -113,7 +109,7 @@ textarea.form-control {
 
 .card h5,
 .card p {
-    color: #fff;
+    color: black;
 }
 
 /* Footer */

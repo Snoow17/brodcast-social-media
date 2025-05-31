@@ -11,7 +11,9 @@
         <div class="card-body">
             <form asp-action="Broadcast" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <textarea asp-for="Message" class="form-control" rows="3"></textarea>
+                    <textarea asp-for="Message"
+                              class="form-control @(ViewData.ModelState["Message"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                              rows="3"></textarea>
                     <span asp-validation-for="Message"></span>
                 </div>
                 <div class="mb-3">
@@ -27,13 +29,6 @@
         </div>
     </div>
 
-    @if (ViewData["Error"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @ViewData["Error"]
-        </div>
-    }
-
     <h2 class="mt-5">Broadcasts</h2>
 
     @foreach (var broadcast in Model.Broadcasts)
@@ -41,12 +36,20 @@
         <div class="card mb-4 d-flex flex-column" style="min-height: 250px;">
             <div class="card-body d-flex flex-column justify-content-between">
                 <div>
-                    <h5 class="card-title">
-                        @broadcast.UserName
-                        <small class="text-muted">
-                            (@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString())
-                        </small>
-                    </h5>
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="@(string.IsNullOrEmpty(broadcast.ProfileImageUrl) ? "/uploads/default-profile.png" : broadcast.ProfileImageUrl)"
+                        alt="Profile Picture"
+                        class="rounded-circle me-2"
+                        style="width: 40px; height: 40px;" />
+
+                        <h5 class="card-title">
+                            @broadcast.UserName
+                            <small class="text-muted">
+                                (@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString())
+                            </small>
+                        </h5>
+                    </div>
+                    
 
                     <p class="card-text">@broadcast.Message</p>
 
@@ -77,7 +80,7 @@
             <div class="modal-content glass-modal p-4">
                 <div class="modal-header border-0">
                     <h5 class="modal-title text-white" id="likersModalLabel">Liked by</h5>
-                    <button type="button" class="btn-close btn-close-white" onclick="closeLikersModal()" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <ul id="likersList" class="list-unstyled text-white mb-0"></ul>
@@ -86,10 +89,21 @@
         </div>
     </div>
 
+
 </div>
 
 @section Styles {
     <link rel="stylesheet" href="~/css/glass.css" />
+    <style>
+        /* Ensure the red border for .is-invalid inputs */
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+
+        .text-danger {
+            color: #dc3545 !important;
+        }
+    </style>
 }
 
 @section Scripts {
@@ -127,8 +141,8 @@
             setTimeout(() => icon.classList.remove("heart-animate"), 300);
         }
 
-        async function showLikersModal(broadcastId) {
-            const response = await fetch(`/Home/GetLikers?broadcastId=${broadcastId}`);
+                 async function showLikersModal(broadcastId) {
+            const response = await fetch(`/Home/Getlikers?broadcastId=${broadcastId}`);
             const users = await response.json();
 
             const list = document.getElementById("likersList");
@@ -136,8 +150,20 @@
 
             users.forEach(user => {
                 const li = document.createElement("li");
-                li.className = "list-group-item";
-                li.innerText = user;
+                li.className = "d-flex align-items-center mb-2";
+
+                const img = document.createElement("img");
+                img.src = user.profileImageUrl || "/uploads/default-profile.png";
+                img.alt = "Profile";
+                img.className = "rounded-circle me-2 border border-secondary";
+                img.style.width = "40px";
+                img.style.height = "40px";
+
+                const span = document.createElement("span");
+                span.innerText = user.name;
+
+                li.appendChild(img);
+                li.appendChild(span);
                 list.appendChild(li);
             });
 

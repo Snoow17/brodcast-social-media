@@ -18,9 +18,10 @@
         @foreach (var user in Model.Result)
         {
             <div class="col">
-                <div class="card bg-dark text-white shadow-lg" role="button" onclick="loadUserModal('@user.Id', true)">
+                <div class="card bg-dark bg-opacity-50 glass-card text-white shadow-lg border border-light rounded-4"
+                     role="button" onclick="loadUserModal('@user.Id', true)">
                     <div class="card-body d-flex align-items-center">
-                        <img src="@(user.ProfileImageUrl ?? "/images/default-profile.png")"
+                        <img src="@(string.IsNullOrEmpty(user.ProfileImageUrl) ? "/uploads/default-profile.png" : user.ProfileImageUrl)"
                              class="rounded-circle me-3 border border-secondary"
                              width="64" height="64"
                              alt="@user.Name's profile image" />
