@@ -46,3 +46,48 @@
         }
     }
 </div>
+
+<script>
+    function showUserModal(userId) {
+        $.ajax({
+            url: '/Users/GetUserModal?id=' + encodeURIComponent(userId),
+            type: 'GET',
+            success: function (data) {
+                $('#userModalContent').html(data);
+                var modal = new bootstrap.Modal(document.getElementById('userModal'));
+                modal.show();
+            },
+            error: function () {
+                alert('Failed to load user data.');
+            }
+        });
+    }
+
+    function toggleListen(userId, btn) {
+        $.ajax({
+            url: '/Users/ToggleListen',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ userId: userId }),
+            headers: {
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (data) {
+                if (data.isListening) {
+                    btn.classList.remove('btn-outline-light');
+                    btn.classList.add('btn-danger');
+                    btn.innerHTML = '🔕 Unlisten';
+                    btn.setAttribute('data-listening', 'true');
+                } else {
+                    btn.classList.remove('btn-danger');
+                    btn.classList.add('btn-outline-light');
+                    btn.innerHTML = '🎧 Listen';
+                    btn.setAttribute('data-listening', 'false');
+                }
+            },
+            error: function () {
+                alert('Error toggling listen status.');
+            }
+        });
+    }
+</script>

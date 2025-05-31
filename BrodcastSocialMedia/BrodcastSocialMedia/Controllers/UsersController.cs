@@ -18,6 +18,22 @@ namespace BrodcastSocialMedia.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> Index(UsersIndexViewModel viewModel)
+        {
+
+            if(viewModel.Search != null)
+            {
+                var users = await _dbContext.Users.Where(u => u.Name.Contains(viewModel.Search))
+                                .ToListAsync();
+                viewModel.Result = users;
+            }
+
+            
+
+
+            return View(viewModel);
+        }
+
         [HttpGet("/Users/Explore")]
         public async Task<IActionResult> Explore()
         {
