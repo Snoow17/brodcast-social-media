@@ -1,10 +1,11 @@
-﻿@using Microsoft.AspNetCore.Identity
-@model UsersShowUserViewModel
+﻿@model UsersShowUserViewModel
+@using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> UserManager
 
 @{
     var currentUser = await UserManager.GetUserAsync(User);
     var profileUser = Model?.User;
+    var isOwnProfile = currentUser?.Id == profileUser?.Id;
     ViewData["Title"] = profileUser?.Name ?? "User Not Found";
 }
 
@@ -15,79 +16,81 @@
     }
     else
     {
-        <h1>Broadcasts from @profileUser.Name</h1>
+        <div class="d-flex align-items-center mb-3">
+            <img src="@(profileUser.ProfileImageUrl ?? "/images/default-profile.png")"
+                 class="rounded-circle me-3 border border-light shadow-sm"
+                 width="64" height="64"
+                 alt="@profileUser.Name's profile image" />
+            <div>
+                <h1 class="text-white mb-0">@profileUser.Name</h1>
+                <small class="text-light opacity-75">Broadcasts: @Model.Broadcasts.Count</small>
+            </div>
+        </div>
 
-        @if (currentUser?.Id != profileUser.Id)
+        @if (User.Identity.IsAuthenticated && !isOwnProfile)
         {
-            <form action="/Users/Listen" method="post">
-                <input type="hidden" name="UserId" value="@profileUser.Id" />
-                <input type="submit" value="Listen to" />
-            </form>
-
-            <form asp-controller="Users" asp-action="UnlistenToUser" method="post" onsubmit="return confirm('Are you sure you want to unlisten this user?');">
-                <input type="hidden" name="UserId" value="@profileUser.Id" />
-                <button type="submit">Unlisten</button>
-            </form>
+            <button class="btn @(Model.IsListening ? "btn-danger" : "btn-outline-light")"
+                    onclick="toggleListen('@profileUser.Id', this)"
+                    data-listening="@Model.IsListening.ToString().ToLower()">
+                @(Model.IsListening ? "🔕 Unlisten" : "🎧 Listen")
+            </button>
         }
+
+        <hr class="bg-light" />
+
+        <h2 class="text-white">Broadcasts</h2>
 
         @if (Model.Broadcasts != null && Model.Broadcasts.Any())
         {
             foreach (var broadcast in Model.Broadcasts)
             {
-                <p>
-                    <b>@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()</b>:
-                    @broadcast.Message
-                </p>
+                <div class="card bg-dark text-white shadow-sm mb-3">
+                    <div class="card-body">
+                        <p class="mb-1">@broadcast.Message</p>
+                        <small class="text-light opacity-75">@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()</small>
+                    </div>
+                </div>
             }
         }
         else
         {
-            <p>This user hasn't posted any broadcasts yet.</p>
+            <p class="text-light opacity-75">This user hasn’t posted any broadcasts yet.</p>
         }
     }
 </div>
 
-<script>
-    function showUserModal(userId) {
-        $.ajax({
-            url: '/Users/GetUserModal?id=' + encodeURIComponent(userId),
-            type: 'GET',
-            success: function (data) {
-                $('#userModalContent').html(data);
-                var modal = new bootstrap.Modal(document.getElementById('userModal'));
-                modal.show();
-            },
-            error: function () {
-                alert('Failed to load user data.');
-            }
-        });
-    }
+<form style="display: none;">
+    @Html.AntiForgeryToken()
+</form>
 
-    function toggleListen(userId, btn) {
-        $.ajax({
-            url: '/Users/ToggleListen',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ userId: userId }),
-            headers: {
-                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-            },
-            success: function (data) {
-                if (data.isListening) {
-                    btn.classList.remove('btn-outline-light');
-                    btn.classList.add('btn-danger');
-                    btn.innerHTML = '🔕 Unlisten';
-                    btn.setAttribute('data-listening', 'true');
-                } else {
-                    btn.classList.remove('btn-danger');
-                    btn.classList.add('btn-outline-light');
-                    btn.innerHTML = '🎧 Listen';
-                    btn.setAttribute('data-listening', 'false');
-                }
-            },
-            error: function () {
-                alert('Error toggling listen status.');
+@section Scripts {
+    <script>
+        async function toggleListen(userId, button) {
+            const isListening = button.dataset.listening === "true";
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+            try {
+                const res = await fetch("/Users/ToggleListen", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken": token
+                    },
+                    body: JSON.stringify({ userId })
+                });
+
+                if (!res.ok) throw new Error(await res.text());
+
+                const data = await res.json();
+
+                button.dataset.listening = data.isListening;
+                button.innerText = data.isListening ? "🔕 Unlisten" : "🎧 Listen";
+                button.classList.toggle("btn-danger", data.isListening);
+                button.classList.toggle("btn-outline-light", !data.isListening);
+            } catch (err) {
+                console.error(err);
+                alert("Error updating listen status.");
             }
-        });
-    }
-</script>
+        }
+    </script>
+}

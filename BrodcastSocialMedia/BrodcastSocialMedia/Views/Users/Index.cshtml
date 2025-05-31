@@ -1,21 +1,82 @@
 ﻿@model UsersIndexViewModel
 
-<div>
-    <h1>Search for users</h1>
+@{
+    ViewData["Title"] = "Search Users";
+}
 
-    <form action="/users" method="get">
-        <input type="text" name="Search" placeholder="Search" value="@Model.Search" />
-        <input type="submit" value="Search" />
+<div class="container mt-5">
+    <h2 class="text-white mb-4">🎧 Search Users</h2>
+
+    <form class="mb-4" method="get" asp-controller="Users" asp-action="Index">
+        <div class="input-group">
+            <input type="text" name="Search" class="form-control" placeholder="Search by name..." value="@Model.Search" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
     </form>
 
-    <hr />
-
-    <h2>Results</h2>
-
-    @foreach (var user in Model.Result)
-    {
-        <p>
-            <a href="/Users/@user.Id">@user.Name</a>
-        </p>
-    }
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var user in Model.Result)
+        {
+            <div class="col">
+                <div class="card bg-dark text-white shadow-lg" role="button" onclick="loadUserModal('@user.Id', true)">
+                    <div class="card-body d-flex align-items-center">
+                        <img src="@(user.ProfileImageUrl ?? "/images/default-profile.png")"
+                             class="rounded-circle me-3 border border-secondary"
+                             width="64" height="64"
+                             alt="@user.Name's profile image" />
+                        <div>
+                            <h5 class="card-title mb-1">@user.Name</h5>
+                            <small class="text-light">Broadcasts: @user.BroadcastCount</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark bg-opacity-75 text-white shadow-lg rounded-4 border border-light">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="userModalLabel">User Info</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="userModalBody">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function loadUserModal(userId, isSearchPage = false) {
+            const modal = new bootstrap.Modal(document.getElementById("userModal"));
+            const modalBody = document.getElementById("userModalBody");
+            modalBody.innerHTML = "<p>Loading...</p>";
+            modal.show();
+
+            try {
+                const res = await fetch(`/Users/GetUserModal?id=${userId}`);
+                if (!res.ok) throw new Error("Failed to load user modal");
+
+                const html = await res.text();
+                modalBody.innerHTML = html;
+
+                if (isSearchPage) {
+                    // Create a "Go to Profile" button
+                    const profileBtn = document.createElement("a");
+                    profileBtn.href = `/Users/ShowUser?id=${userId}`;
+                    profileBtn.className = "btn btn-primary w-100 mt-3";
+                    profileBtn.innerText = "Go to Profile";
+                    modalBody.appendChild(profileBtn);
+                }
+            } catch (err) {
+                console.error(err);
+                modalBody.innerHTML = '<p class="text-danger">Failed to load user details.</p>';
+            }
+        }
+    </script>
+}

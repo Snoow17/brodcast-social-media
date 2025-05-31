@@ -5,8 +5,6 @@
 
 <div class="container mt-5">
 
-    
-
     <h2 class="text-light">New Broadcast</h2>
 
     <div class="card mb-4 new-broadcast-card">
@@ -42,7 +40,6 @@
     {
         <div class="card mb-4 d-flex flex-column" style="min-height: 250px;">
             <div class="card-body d-flex flex-column justify-content-between">
-
                 <div>
                     <h5 class="card-title">
                         @broadcast.UserName
@@ -91,6 +88,10 @@
 
 </div>
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/glass.css" />
+}
+
 @section Scripts {
     <script>
         async function toggleLike(button) {
@@ -126,7 +127,7 @@
             setTimeout(() => icon.classList.remove("heart-animate"), 300);
         }
 
-                async function showLikersModal(broadcastId) {
+        async function showLikersModal(broadcastId) {
             const response = await fetch(`/Home/GetLikers?broadcastId=${broadcastId}`);
             const users = await response.json();
 
@@ -140,13 +141,11 @@
                 list.appendChild(li);
             });
 
-                    const modal = new bootstrap.Modal(document.getElementById('likersModal'));
-        modal.show();
+            const modal = new bootstrap.Modal(document.getElementById('likersModal'));
+            modal.show();
         }
 
-        
-
-            document.getElementById("ImageUpload").addEventListener("change", function () {
+        document.getElementById("ImageUpload").addEventListener("change", function () {
             const fileName = this.files[0]?.name || "Choose Image";
             document.querySelector("label[for='ImageUpload']").innerText = fileName;
         });

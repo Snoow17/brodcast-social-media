@@ -1,401 +1,16 @@
-.custom-glass-navbar {
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
-    color: #fff;
-    padding: 1rem;
-    position: fixed;
-    width: 80%;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 2rem;
-    z-index: 1050;
-}
-
-.custom-glass-navbar .navbar-nav .nav-link,
-.custom-glass-navbar .navbar-brand {
-    color: #fff !important;
-}
-
-.custom-glass-navbar .nav-link:hover,
-.custom-glass-navbar .navbar-brand:hover {
-    text-decoration: underline;
-}
-
-.custom-input {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.custom-input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-}
-
-body {
-    background: url(https://wallpaperbat.com/img/525395-summer-fields.jpg) no-repeat center center fixed;
-    background-size: cover;
-    color: #fff;
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-.login-card {
-    max-width: 500px;
-    margin: 150px auto 40px auto;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-    padding: 2rem;
-    color: #fff;
-    transition: all 0.3s ease-in-out;
-}
-
-
-.login-card:hover {
-    box-shadow: 0 18px 40px rgba(0, 123, 255, 0.4);
-    transform: translateY(-2px);
-}
-
-.login-card h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.login-card p {
-    text-align: center;
-    color: #f0f0f0;
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.login-card label {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.login-card input:not([type="checkbox"]) {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    color: #fff;
-    padding: 0.75rem;
-    width: 100%;
-    transition: all 0.3s ease-in-out;
-}
-
-.login-card input:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-    outline: none;
-}
-
-.login-card .btn-primary {
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1rem;
-    margin-top: 0.5rem;
-}
-
-.login-card .form-check-label {
-    margin-left: 0.25rem;
-    font-weight: 400;
-    font-size: 0.95rem;
-}
-
-.login-card .text-danger {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    background: rgba(255, 0, 0, 0.1);
-    padding: 0.5rem;
-    border-radius: 8px;
-    color: #ffb3b3;
-}
-
-.login-card a {
-    color: #cce6ff;
-    text-decoration: underline;
-    font-size: 0.9rem;
-}
-
-.login-card a:hover {
-    text-decoration: none;
-    color: #ffffff;
-}
-
-.new-broadcast-card {
-    background: rgba(255, 255, 255, 0.18);
+/* Glass effect shared styles */
+.glass-effect {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 12px 32px rgba(0, 123, 255, 0.3);
-    transition: all 0.3s ease-in-out;
-}
-
-.new-broadcast-card:hover {
-    box-shadow: 0 16px 40px rgba(0, 123, 255, 0.5);
-    transform: translateY(-2px);
-}
-
-textarea.form-control {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #fff;
-    border-radius: 12px;
-    padding: 1rem;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-}
-
-textarea.form-control::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-textarea.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.3);
-    outline: none;
-    background: rgba(255, 255, 255, 0.15);
-}
-
-textarea.form-control:focus {
-    transform: scale(1.01);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.custom-file-upload {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-}
-
-.upload-label {
-    display: inline-block;
-    width: 100%;
-    padding: 0.75rem 1.25rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    color: #fff;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.upload-label:hover {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
-    color: #cce6ff;
-}
-
-input[type="file"].form-control-file {
-    display: none;
-}
-
-
-.card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    color: #fff;
-}
-
-.card-body {
-    padding: 1.5rem;
-}
-
-.card h5,
-.card p {
-    color: #fff;
-}
-
-
-.like-button {
-    background: none;
-    border: none;
-    padding: 0;
-    outline: none;
-    box-shadow: none;
-    margin-right: 10px;
-    color: #007bff;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.like-button:focus,
-.like-button:active {
-    outline: none;
-    box-shadow: none;
-}
-
-.like-button:hover {
-    transform: scale(1.1);
-    color: #0056b3;
-}
-
-
-.heart-animate {
-    animation: pop 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-@keyframes pop {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.5);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-.like-button .fa {
-    transition: color 0.2s ease;
-}
-
-.like-button .fa-heart {
-    color: #007bff;
-}
-
-.like-button.animate {
-    animation: bounce 0.3s ease-in-out;
-}
-
-.like-count {
-    margin-left: 5px;
-    font-weight: 500;
-    font-size: 1rem;
-    cursor: pointer;
-    color: #fff;
-}
-
-
-#likersModal .modal-content {
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-
-.card img {
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 0.5rem;
-}
-
-.card:hover {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-    transform: translateY(-5px);
     transition: all 0.3s ease;
 }
 
-
-
-textarea:focus,
-input[type="file"]:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-}
-
-
-.mb-4 {
-    margin-bottom: 1.5rem !important;
-}
-
-
-.footer.fixed-bottom {
-    z-index: 1030;
-    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 768px) {
-    .custom-glass-navbar {
-        width: 95%;
-        padding: 0.75rem;
-    }
-
-    .card img {
-        max-height: 250px;
-    }
-}
-
-
-body {
-    animation: fadeInBody 0.5s ease-in-out;
-}
-
-@keyframes fadeInBody {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-.field-validation-error {
-    color: #ffb3b3;
-    background: rgba(255, 0, 0, 0.1);
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 0, 0, 0.2);
-    margin-top: 0.5rem;
-    font-weight: 500;
-    display: block;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.field-validation-valid {
-    display: none;
-}
-
+/* Fade In Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -408,99 +23,133 @@ body {
     }
 }
 
-.validation-summary-errors {
-    background: rgba(255, 0, 0, 0.15);
-    border: 1px solid rgba(255, 0, 0, 0.3);
-    border-radius: 10px;
-    padding: 1rem;
-    color: #ffcccc;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-input.input-validation-error,
-textarea.input-validation-error {
-    border: 1px solid rgba(255, 100, 100, 0.6);
-    background: rgba(255, 0, 0, 0.05);
+/* Body & HTML */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
     color: #fff;
-    box-shadow: 0 0 8px rgba(255, 50, 50, 0.5);
+}
+
+body {
+    background: url(https://wallpaperbat.com/img/525395-summer-fields.jpg) no-repeat center center fixed;
+    background-size: cover;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Navbar */
+.custom-glass-navbar {
+    position: fixed;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 2rem;
+    z-index: 1050;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+    .custom-glass-navbar .navbar-nav .nav-link,
+    .custom-glass-navbar .navbar-brand {
+        color: #fff !important;
+    }
+
+        .custom-glass-navbar .nav-link:hover,
+        .custom-glass-navbar .navbar-brand:hover {
+            text-decoration: underline;
+        }
+
+/* Inputs */
+.custom-input,
+textarea.form-control {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.75rem;
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+}
+
+    .custom-input:focus,
+    textarea.form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    textarea.form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+/* Cards */
+.card,
+.new-broadcast-card {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
 
-input.input-validation-error:focus,
-textarea.input-validation-error:focus {
-    outline: none;
-    border-color: rgba(255, 100, 100, 0.8);
-    box-shadow: 0 0 10px rgba(255, 100, 100, 0.8);
+    .card:hover,
+    .new-broadcast-card:hover {
+        box-shadow: 0 16px 40px rgba(0, 123, 255, 0.5);
+        transform: translateY(-2px);
+    }
+
+.card-body {
+    padding: 1.5rem;
 }
 
-textarea,
-input[type="file"],
-input[type="text"] {
-    transition: all 0.3s ease;
+.card img {
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 0.5rem;
 }
 
+.card h5,
+.card p {
+    color: #fff;
+}
+
+/* Footer */
+.footer.fixed-bottom {
+    z-index: 1030;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal */
 .modal-content {
-    border-radius: 1rem;
-}
-
-#likersList .list-group-item {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-}
-
-.glass-modal {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 1rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    color: white;
-}
-
-    .glass-modal .modal-title {
-        font-weight: 600;
-    }
-
-    .glass-modal .modal-body {
-        font-size: 1rem;
-    }
-
-.btn-close-white {
-    filter: invert(1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .modal-backdrop.show {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-.glass-modal .modal-body img {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+/* Spacing */
+.mb-4 {
+    margin-bottom: 1.5rem !important;
 }
 
-.glass-modal .btn-outline-light {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: white;
-    background-color: rgba(255, 255, 255, 0.05);
-    transition: all 0.2s ease;
-}
-
-    .glass-modal .btn-outline-light:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-        color: #fff;
+/* Media Query */
+@media (max-width: 768px) {
+    .custom-glass-navbar {
+        width: 95%;
+        padding: 0.75rem;
     }
 
-.glass-effect {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.modal-content {
-    background: transparent !important;
+    .card img {
+        max-height: 250px;
+    }
 }

@@ -28,8 +28,30 @@ namespace BrodcastSocialMedia.Controllers
                 viewModel.Result = users;
             }
 
-            
+            return View(viewModel);
+        }
 
+        public async Task<IActionResult> ShowUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var broadcasts = await _dbContext.Broadcasts
+                .Where(b => b.UserId == id)
+                .OrderByDescending(b => b.Published)
+                .ToListAsync();
+
+            var currentUserId = _userManager.GetUserId(User);
+            var isListening = await _dbContext.UserListenings
+                .AnyAsync(IActionResult => IActionResult.ListenerId == currentUserId && IActionResult.ListenerId == id);
+
+            var viewModel = new UsersShowUserViewModel
+            {
+                User = user,
+                Broadcasts = broadcasts,
+                IsListening = isListening,
+                CurrentUserId = currentUserId
+            };
 
             return View(viewModel);
         }

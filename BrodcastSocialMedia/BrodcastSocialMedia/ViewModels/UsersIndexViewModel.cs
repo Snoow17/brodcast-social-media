@@ -6,5 +6,6 @@ namespace BrodcastSocialMedia.ViewModels
     {
         public string Search { get; set; }
         public List<ApplicationUser> Result { get; set; } = new List<ApplicationUser>();
+        public List<ExploreUserViewModel> Users { get; set; } = new List<ExploreUserViewModel>();
     }
 }

@@ -9,6 +9,6 @@
         public string? ImageUrl { get; set; }
 
         public ICollection<BroadcastLike> Likes { get; set; }
-
+        public string UserId { get; internal set; }
     }
 }
