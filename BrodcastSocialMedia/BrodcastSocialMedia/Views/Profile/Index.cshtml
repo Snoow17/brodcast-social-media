@@ -1,37 +1,47 @@
 ﻿@model ProfileIndexViewModel
 
-<div>
-    <h1>Update profile</h1>
+<div class="container mt-5 profile-container">
+    <div class="profile-header d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center">
+            @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+            {
+                <img src="@Model.ProfileImageUrl" alt="Profile Image" class="profile-image" />
+            }
+            else
+            {
+                <img src="https://via.placeholder.com/150" alt="Default Profile" class="profile-image" />
+            }
+            <h1 class="profile-username ms-3">@Model.Name</h1>
+        </div>
+        <button id="toggle-update" class="update-btn">Update Profile</button>
+    </div>
 
-    <form asp-action="Update" method="post">
-        <label asp-for="Name">Username:</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+    <div id="update-forms" class="collapse-section">
+        <form asp-action="Update" method="post" class="mb-4">
+            <label asp-for="Name">Username:</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
 
-        <button type="submit">Save</button>
-    </form>
+            <button type="submit" class="btn btn-primary mt-2">Save</button>
+        </form>
+
+        <form asp-action="ProfileImage" method="post" enctype="multipart/form-data">
+            <label>Upload profile picture:</label>
+            <input asp-for="ProfileImageUrl" type="file" class="form-control mb-2" />
+            <button type="submit" class="btn btn-secondary">Upload</button>
+        </form>
+    </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            const toggleBtn = document.getElementById('toggle-update');
+            const updateForms = document.getElementById('update-forms');
 
-    <form asp-action="ProfileImage" method="post" enctype="multipart/form-data">
-        <label>Upload profile picture:</label>
-        <input asp-for="ProfileImageUrl" type="file" />
-        <button type="submit">Upload</button>
-    </form>
-
-    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
-    {
-        <div>
-            <img src="@Model.ProfileImageUrl" alt="Profile Image" width="200" />
-        </div>
+            toggleBtn.addEventListener('click', function () {
+                updateForms.classList.toggle('active');
+            });
+        </script>
+            </section>
     }
-    else
-    {
-        <p>No profile image uploaded yet.</p>
-    }
-
 </div>

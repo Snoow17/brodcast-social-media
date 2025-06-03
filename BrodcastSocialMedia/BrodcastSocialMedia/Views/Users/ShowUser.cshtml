@@ -9,55 +9,58 @@
     ViewData["Title"] = profileUser?.Name ?? "User Not Found";
 }
 
-<div>
-    @if (profileUser == null)
-    {
-        <h1>User not found</h1>
-    }
-    else
-    {
-        <div class="d-flex align-items-center mb-3">
-            <img src="@(profileUser.ProfileImageUrl ?? "/uploads/default-profile.png")"
-                 class="rounded-circle me-3 border border-light shadow-sm"
-                 width="64" height="64"
-                 alt="@profileUser.Name's profile image" />
-            <div>
-                <h1 class="text-white mb-0">@profileUser.Name</h1>
-                <small class="text-light opacity-75">Broadcasts: @Model.Broadcasts.Count</small>
-            </div>
-        </div>
-
-        @if (User.Identity.IsAuthenticated && !isOwnProfile)
+<div class="container mt-5">
+    <div>
+        @if (profileUser == null)
         {
-            <button class="btn @(Model.IsListening ? "btn-danger" : "btn-outline-light")"
-                    onclick="toggleListen('@profileUser.Id', this)"
-                    data-listening="@Model.IsListening.ToString().ToLower()">
-                @(Model.IsListening ? "🔕 Unlisten" : "🎧 Listen")
-            </button>
-        }
-
-        <hr class="bg-light" />
-
-        <h2 class="text-white">Broadcasts</h2>
-
-        @if (Model.Broadcasts != null && Model.Broadcasts.Any())
-        {
-            foreach (var broadcast in Model.Broadcasts)
-            {
-                <div class="card bg-dark text-white shadow-sm mb-3">
-                    <div class="card-body">
-                        <p class="mb-1">@broadcast.Message</p>
-                        <small class="text-light opacity-75">@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()</small>
-                    </div>
-                </div>
-            }
+            <h1>User not found</h1>
         }
         else
         {
-            <p class="text-light opacity-75">This user hasn’t posted any broadcasts yet.</p>
+            <div class="d-flex align-items-center mb-3">
+                <img src="@(profileUser.ProfileImageUrl ?? "/uploads/default-profile.png")"
+                     class="rounded-circle me-3 border border-light shadow-sm"
+                     width="64" height="64"
+                     alt="@profileUser.Name's profile image" />
+                <div>
+                    <h1 class="text-white mb-0">@profileUser.Name</h1>
+                    <small class="text-light opacity-75">Broadcasts: @Model.Broadcasts.Count</small>
+                </div>
+            </div>
+
+            @if (User.Identity.IsAuthenticated && !isOwnProfile)
+            {
+                <button class="btn @(Model.IsListening ? "btn-danger" : "btn-outline-light")"
+                        onclick="toggleListen('@profileUser.Id', this)"
+                        data-listening="@Model.IsListening.ToString().ToLower()">
+                    @(Model.IsListening ? "🔕 Unlisten" : "🎧 Listen")
+                </button>
+            }
+
+            <hr class="bg-light" />
+
+            <h2 class="text-white">Broadcasts</h2>
+
+            @if (Model.Broadcasts != null && Model.Broadcasts.Any())
+            {
+                foreach (var broadcast in Model.Broadcasts)
+                {
+                    <div class="card bg-dark text-white shadow-sm mb-3">
+                        <div class="card-body">
+                            <p class="mb-1">@broadcast.Message</p>
+                            <small class="text-light opacity-75">@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()</small>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-light opacity-75">This user hasn’t posted any broadcasts yet.</p>
+            }
         }
-    }
+    </div>
 </div>
+
 
 <form style="display: none;">
     @Html.AntiForgeryToken()

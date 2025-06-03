@@ -92,10 +92,21 @@ textarea.form-control::placeholder {
     transition: all 0.3s ease;
 }
 
-.card:hover, .new-broadcast-card:hover {
-    box-shadow: 0 16px 40px rgba(0, 123, 255, 0.5);
-    transform: translateY(-2px);
+.login-card {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
+
+    .card:hover, .new-broadcast-card:hover {
+        box-shadow: 0 16px 40px rgba(0, 123, 255, 0.5);
+        transform: translateY(-2px);
+    }
 
 .card-body {
     padding: 1.5rem;
@@ -148,4 +159,174 @@ textarea.form-control::placeholder {
     .card img {
         max-height: 250px;
     }
+}
+
+@media (max-width: 500px) {
+    .login-card {
+        padding: 1.5rem;
+        max-width: 90%;
+    }
+}
+
+/* === Login Page Styling === */
+.login-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+}
+
+.login-card {
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.7s ease forwards;
+    transform: translateY(-10px);
+}
+
+    /* Headings */
+    .login-card h2 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+
+    .login-card p {
+        color: rgba(255, 255, 255, 0.7);
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Form Fields */
+    .login-card label {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: black;
+        font-weight: 500;
+    }
+
+    .login-card input[type="email"],
+    .login-card input[type="password"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        color: black;
+        margin-bottom: 1rem;
+        transition: background 0.3s, box-shadow 0.3s;
+    }
+
+        .login-card input[type="email"]::placeholder,
+        .login-card input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .login-card input[type="email"]:focus,
+        .login-card input[type="password"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+        }
+
+    /* Checkbox */
+    .login-card .form-check-label {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .login-card .form-check-input {
+        accent-color: #0d6efd;
+    }
+
+    /* Button */
+    .login-card button[type="submit"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 12px;
+        background: rgba(13, 110, 253, 0.8);
+        color: black;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+        .login-card button[type="submit"]:hover {
+            background: rgba(13, 110, 253, 1);
+            transform: translateY(-2px);
+        }
+
+        .login-card button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+    /* Links */
+    .login-card .text-center a {
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .login-card .text-center a:hover {
+            color: black;
+            text-decoration: underline;
+        }
+
+/* Profile Page Container */
+.collapse-section {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+}
+
+    .collapse-section.active {
+        max-height: 500px; /* Adjust to your form’s approximate height */
+        padding-top: 1rem;
+    }
+
+.update-btn {
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    background: #007bff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+    .update-btn:hover {
+        background: #0056b3;
+        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5);
+        transform: translateY(-2px);
+    }
+
+.profile-container {
+    padding-top: 6rem;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+    border: 3px solid #fff;
+}
+
+.profile-username {
+    font-family: 'Pacifico', cursive;
+    font-size: 2rem;
+    color: #000;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
