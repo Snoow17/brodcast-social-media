@@ -79,5 +79,41 @@
                 modalBody.innerHTML = '<p class="text-danger">Failed to load user details.</p>';
             }
         }
+
+        async function toggleListen(userId, button) {
+            const isListening = button.dataset.listening === "true";
+
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+            if (!token) {
+                console.error("CSRF token not found");
+                alert("Missing CSRF token");
+                return;
+            }
+
+            try {
+                const res = await fetch("/Users/ToggleListen", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken": token
+                    },
+                    body: JSON.stringify({ userId })
+                });
+
+                if (!res.ok) {
+                    const errMsg = await res.text();
+                    throw new Error(errMsg);
+                }
+
+                const result = await res.json();
+                button.innerText = result.isListening ? "🔕 Unlisten" : "🎧 Listen";
+                button.classList.toggle("btn-danger", result.isListening);
+                button.classList.toggle("btn-outline-light", !result.isListening);
+                button.dataset.listening = result.isListening;
+            } catch (err) {
+                console.error("Failed to update:", err);
+                alert("Failed to update listening status.");
+            }
+        }
     </script>
 }

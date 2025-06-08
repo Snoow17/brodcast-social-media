@@ -86,7 +86,7 @@
 
                 const data = await res.json();
 
-                button.dataset.listening = data.isListening;
+                button.dataset.listening = data.isListening.toString().toLowerCase();
                 button.innerText = data.isListening ? "🔕 Unlisten" : "🎧 Listen";
                 button.classList.toggle("btn-danger", data.isListening);
                 button.classList.toggle("btn-outline-light", !data.isListening);

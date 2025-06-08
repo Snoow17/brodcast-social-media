@@ -24,7 +24,7 @@
 <body class="d-flex flex-column min-vh-100">
 
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light custom-glass-navbar border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light custom-glass-navbar box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BrodcastSocialMedia</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
@@ -52,15 +52,16 @@
         </nav>
     </header>
 
-    <main role="main" class="flex-fill">
-        <div class="container mt-5 pt-5 pb-5">
+    <main role="main" class="pb-5" style="padding-bottom: 100px;">
+        <div class="container mt-5 pt-5">
             @RenderBody()
-        </div>
+        </div>2
     </main>
 
-    <footer class="border-top bg-light text-muted mt-auto">
-        <div class="container text-center py-3">
-            &copy; 2025 - BrodcastSocialMedia - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="custom-glass-footer text-white py-2">
+        <div class="text-center">
+            &copy; 2025 - BrodcastSocialMedia -
+            <a asp-controller="Home" asp-action="Privacy" class="text-white">Privacy</a>
         </div>
     </footer>
 

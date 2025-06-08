@@ -43,7 +43,7 @@ namespace BrodcastSocialMedia.Controllers
 
             var currentUserId = _userManager.GetUserId(User);
             var isListening = await _dbContext.UserListenings
-                .AnyAsync(IActionResult => IActionResult.ListenerId == currentUserId && IActionResult.ListenerId == id);
+        .AnyAsync(l => l.ListenerId == currentUserId && l.TargetId == id);
 
             var viewModel = new UsersShowUserViewModel
             {
