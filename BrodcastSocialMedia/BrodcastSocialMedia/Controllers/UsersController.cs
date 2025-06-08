@@ -61,16 +61,18 @@ namespace BrodcastSocialMedia.Controllers
         {
             var currentUserId = _userManager.GetUserId(User);
 
+            var listeningToIds = await _dbContext.UserListenings
+               .Where(l => l.ListenerId == currentUserId)
+               .Select(l => l.TargetId)
+               .ToListAsync();
+
+            listeningToIds ??= new List<string>();
+
             var users = await _dbContext.Users
                 .Include(u => u.Broadcasts)
-                .Where(u => u.Id != currentUserId)
+                .Where(u => u.Id != currentUserId && !listeningToIds.Contains(u.Id))
                 .OrderByDescending(u => u.Broadcasts.Count)
                 .Take(10)
-                .ToListAsync();
-
-            var listeningToIds = await _dbContext.UserListenings
-                .Where(l => l.ListenerId == currentUserId)
-                .Select(l => l.TargetId)
                 .ToListAsync();
 
             var viewModel = new ExploreViewModel
@@ -81,7 +83,7 @@ namespace BrodcastSocialMedia.Controllers
                     Name = u.Name,
                     BroadcastCount = u.Broadcasts.Count,
                     ProfileImageUrl = u.ProfileImageUrl ?? "/images/default-profile.png",
-                    IsListening = listeningToIds.Contains(u.Id)
+                    IsListening = false
                 }).ToList()
             };
 
