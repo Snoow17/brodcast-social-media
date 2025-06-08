@@ -35,6 +35,12 @@ body {
     background: url(https://wallpaperbat.com/img/525395-summer-fields.jpg) no-repeat center center fixed;
     background-size: cover;
     animation: fadeIn 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 /* Navbar */
@@ -327,21 +333,18 @@ textarea.form-control::placeholder {
 }
 
 .custom-glass-footer {
-    position: fixed;
-    bottom: 2rem; /* Same distance from bottom as navbar is from top */
     width: 80%;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 2rem auto; /* centered footer using margin auto */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.15) !important;
-    z-index: 1050;
     padding: 1rem;
     color: #fff;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    text-align: center; /* center text inside */
 }
 
     .custom-glass-footer a {
