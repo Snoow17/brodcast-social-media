@@ -9,10 +9,9 @@
         public DateTime Published { get; set; }
         public string ProfileImageUrl { get; set; }
         public string UserName { get; set; }
-
         public int LikeCount { get; set; }
         public bool IsLikedByCurrentUser { get; set; }
-        public bool IsOwnedByCurrentUser { get; set; } // Needed for delete button
+        public bool IsOwnedByCurrentUser { get; set; }
 
     }
 }

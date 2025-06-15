@@ -89,7 +89,6 @@
 
                 if (!res.ok) throw new Error("Failed to update");
 
-                // Update UI immediately
                 button.setAttribute("data-listening", (!isListening).toString());
                 button.classList.toggle("btn-danger", !isListening);
                 button.classList.toggle("btn-outline-light", isListening);

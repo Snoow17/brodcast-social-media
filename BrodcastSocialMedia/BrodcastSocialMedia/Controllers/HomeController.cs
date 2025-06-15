@@ -33,16 +33,13 @@ namespace BrodcastSocialMedia.Controllers
                 });
             }
 
-            // Get IDs of users the current user is listening to
             var listenedUserIds = await _dbContext.UserListenings
                 .Where(ul => ul.ListenerId == user.Id)
                 .Select(ul => ul.TargetId)
                 .ToListAsync();
 
-            // Also include current user's own ID
             listenedUserIds.Add(user.Id);
 
-            // Fetch broadcasts from listened users + self
             var broadcasts = await _dbContext.Broadcasts
                 .Where(b => listenedUserIds.Contains(b.UserId))
                 .Include(b => b.User)
@@ -169,7 +166,7 @@ namespace BrodcastSocialMedia.Controllers
                 return NotFound();
 
             if (broadcast.UserId != user.Id)
-                return Forbid(); // Prevent deleting others' posts
+                return Forbid();
 
             _dbContext.Broadcasts.Remove(broadcast);
             await _dbContext.SaveChangesAsync();

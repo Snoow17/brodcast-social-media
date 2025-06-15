@@ -44,7 +44,7 @@ namespace BrodcastSocialMedia.Controllers
                 {
                     Id = b.Id,
                     Message = b.Message,
-                    ImageUrl = b.ImageUrl,  // <-- Include image here
+                    ImageUrl = b.ImageUrl,
                     Published = b.Published,
                     LikeCount = b.Likes.Count,
                     UserId = b.UserId,
@@ -69,7 +69,7 @@ namespace BrodcastSocialMedia.Controllers
         [HttpGet("/Users/Explore")]
         public async Task<IActionResult> Explore()
         {
-            var user = await _userManager.GetUserAsync(User);  // <-- get user here
+            var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 TempData["ErrorMessage"] = "You must register and log in to use this feature.";
