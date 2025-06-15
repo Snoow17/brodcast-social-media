@@ -1,4 +1,5 @@
 ﻿@model HomeIndexViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <div class="container mt-5 pt-5">
     <h2 class="text-center mb-4">Top Broadcasts This Week</h2>
@@ -13,7 +14,14 @@
                          class="rounded-circle me-2"
                          style="width: 40px; height: 40px;" />
 
-                    <h5 class="mb-0">@broadcast.UserName</h5>
+                    <h5 class="mb-0">
+                        <a asp-controller="Users"
+                           asp-action="ShowUser"
+                           asp-route-id="@broadcast.UserId"
+                           class="text-decoration-none text-dark">
+                            @broadcast.UserName
+                        </a>
+                    </h5>
                 </div>
                 <p class="card-text">@broadcast.Message</p>
 

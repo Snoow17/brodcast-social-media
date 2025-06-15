@@ -9,7 +9,7 @@
             }
             else
             {
-                <img src="https://via.placeholder.com/150" alt="Default Profile" class="profile-image" />
+                <img src="https://www.pngkit.com/png/detail/126-1262807_instagram-default-profile-picture-png.png" alt="Default Profile" class="profile-image" />
             }
             <h1 class="profile-username ms-3">@Model.Name</h1>
         </div>
@@ -27,7 +27,8 @@
 
         <form asp-action="ProfileImage" method="post" enctype="multipart/form-data">
             <label>Upload profile picture:</label>
-            <input asp-for="ProfileImageUrl" type="file" class="form-control mb-2" />
+            <input asp-for="ProfileImage" type="file" class="form-control mb-2" />
+            <span asp-validation-for="ProfileImage" class="text-danger"></span>
             <button type="submit" class="btn btn-secondary">Upload</button>
         </form>
     </div>

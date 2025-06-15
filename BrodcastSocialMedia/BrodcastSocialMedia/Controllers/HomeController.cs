@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using BrodcastSocialMedia.Data;
 using BrodcastSocialMedia.Models;
@@ -33,10 +33,18 @@ namespace BrodcastSocialMedia.Controllers
                 });
             }
 
-            var broadcasts = await _dbContext.UserListenings
+            // Get IDs of users the current user is listening to
+            var listenedUserIds = await _dbContext.UserListenings
                 .Where(ul => ul.ListenerId == user.Id)
-                .Select(ul => ul.Target)
-                .SelectMany(u => u.Broadcasts)
+                .Select(ul => ul.TargetId)
+                .ToListAsync();
+
+            // Also include current user's own ID
+            listenedUserIds.Add(user.Id);
+
+            // Fetch broadcasts from listened users + self
+            var broadcasts = await _dbContext.Broadcasts
+                .Where(b => listenedUserIds.Contains(b.UserId))
                 .Include(b => b.User)
                 .Include(b => b.Likes)
                 .OrderByDescending(b => b.Published)
@@ -51,8 +59,11 @@ namespace BrodcastSocialMedia.Controllers
                     ImageUrl = b.ImageUrl,
                     Published = b.Published,
                     UserName = b.User.Name,
+                    ProfileImageUrl = b.User.ProfileImageUrl,
                     LikeCount = b.Likes.Count,
-                    IsLikedByCurrentUser = b.Likes.Any(l => l.UserId == user.Id)
+                    IsLikedByCurrentUser = b.Likes.Any(l => l.UserId == user.Id),
+                    IsOwnedByCurrentUser = b.UserId == user.Id,
+                    UserId = b.UserId
                 }).ToList()
             };
 
@@ -73,7 +84,18 @@ namespace BrodcastSocialMedia.Controllers
         [HttpPost]
         public async Task<IActionResult> Broadcast(HomeBroadcastViewModel viewModel)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["ErrorMessage"] = "You must be logged in to post a broadcast.";
+                return RedirectToAction("Index");
+            }
+
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found. Please log in again.";
+                return RedirectToAction("Index");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -137,6 +159,25 @@ namespace BrodcastSocialMedia.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBroadcast(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var broadcast = await _dbContext.Broadcasts.FindAsync(id);
+
+            if (broadcast == null)
+                return NotFound();
+
+            if (broadcast.UserId != user.Id)
+                return Forbid(); // Prevent deleting others' posts
+
+            _dbContext.Broadcasts.Remove(broadcast);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> ToggleLike([FromBody] int broadcastId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -190,7 +231,14 @@ namespace BrodcastSocialMedia.Controllers
         [HttpGet]
         public async Task<IActionResult> TopBroadcasts()
         {
-            var userId = _userManager.GetUserId(User);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "You must register and log in to use this feature.";
+                return RedirectToAction("Index");
+            }
+
+            var userId = user.Id;
             var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
 
             var topBroadcasts = await _dbContext.Broadcasts
@@ -216,7 +264,8 @@ namespace BrodcastSocialMedia.Controllers
                     Published = x.Broadcast.Published,
                     UserName = x.Broadcast.User.Name,
                     LikeCount = x.LikeCount,
-                    IsLikedByCurrentUser = x.Broadcast.Likes.Any(l => l.UserId == userId)
+                    IsLikedByCurrentUser = x.Broadcast.Likes.Any(l => l.UserId == userId),
+                    UserId = x.Broadcast.UserId
                 }).ToList()
             };
 

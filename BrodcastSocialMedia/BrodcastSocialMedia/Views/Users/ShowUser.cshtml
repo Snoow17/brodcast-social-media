@@ -45,10 +45,33 @@
             {
                 foreach (var broadcast in Model.Broadcasts)
                 {
-                    <div class="card  text-white shadow-sm mb-3">
+                    <div class="card text-white shadow-sm mb-3">
                         <div class="card-body">
                             <p class="mb-1">@broadcast.Message</p>
-                            <small class="text-light opacity-75">@broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()</small>
+
+                            @if (!string.IsNullOrEmpty(broadcast.ImageUrl))
+                            {
+                                <img src="@broadcast.ImageUrl" alt="Broadcast image" class="img-fluid rounded mb-2" />
+                            }
+
+
+                            <div class="d-flex justify-content-between align-items-center position-relative" style="position: relative;">
+
+                                <div class="like-actions d-flex align-items-center gap-2">
+                                    <button class="btn btn-link p-0 like-button" data-broadcast-id="@broadcast.Id" onclick="toggleLike(this)">
+                                        <i class="fa @(broadcast.IsLikedByCurrentUser ? "fa-heart text-primary" : "fa-heart-o") fa-lg"></i>
+                                    </button>
+
+                                    <button class="btn btn-link p-0 text-decoration-none text-dark opacity-75" onclick="showLikersModal(@broadcast.Id)">
+                                        <span class="like-count">@broadcast.LikeCount</span> liked
+                                    </button>
+                                </div>
+
+                                <small class="text-dark opacity-75 position-absolute bottom-0 end-0 mb-2 me-3">
+                                    @broadcast.Published.ToShortDateString() @broadcast.Published.ToShortTimeString()
+                                </small>
+
+                            </div>
                         </div>
                     </div>
                 }

@@ -38,12 +38,22 @@ namespace BrodcastSocialMedia.Controllers
 
             var broadcasts = await _dbContext.Broadcasts
                 .Where(b => b.UserId == id)
+                .Include(b => b.Likes)
                 .OrderByDescending(b => b.Published)
+                .Select(b => new BroadcastViewModel
+                {
+                    Id = b.Id,
+                    Message = b.Message,
+                    ImageUrl = b.ImageUrl,  // <-- Include image here
+                    Published = b.Published,
+                    LikeCount = b.Likes.Count,
+                    UserId = b.UserId,
+                })
                 .ToListAsync();
 
             var currentUserId = _userManager.GetUserId(User);
             var isListening = await _dbContext.UserListenings
-        .AnyAsync(l => l.ListenerId == currentUserId && l.TargetId == id);
+                .AnyAsync(l => l.ListenerId == currentUserId && l.TargetId == id);
 
             var viewModel = new UsersShowUserViewModel
             {
@@ -59,7 +69,14 @@ namespace BrodcastSocialMedia.Controllers
         [HttpGet("/Users/Explore")]
         public async Task<IActionResult> Explore()
         {
-            var currentUserId = _userManager.GetUserId(User);
+            var user = await _userManager.GetUserAsync(User);  // <-- get user here
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "You must register and log in to use this feature.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var currentUserId = user.Id;
 
             var listeningToIds = await _dbContext.UserListenings
                .Where(l => l.ListenerId == currentUserId)
@@ -140,7 +157,16 @@ namespace BrodcastSocialMedia.Controllers
             var model = new UsersShowUserViewModel
             {
                 User = user,
-                Broadcasts = user.Broadcasts.OrderByDescending(b => b.Published).ToList(),
+                Broadcasts = user.Broadcasts
+                    .OrderByDescending(b => b.Published)
+                    .Select(b => new BroadcastViewModel
+                    {
+                        Id = b.Id,
+                        Message = b.Message,
+                        ImageUrl = b.ImageUrl,
+                        Published = b.Published
+                    })
+                    .ToList(),
                 CurrentUserId = currentUserId,
                 IsListening = isListening
             };

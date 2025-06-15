@@ -1,5 +1,6 @@
 ﻿using BrodcastSocialMedia.Models;
 using BrodcastSocialMedia.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,13 @@ namespace BrodcastSocialMedia.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _env;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProfileController(UserManager<ApplicationUser> userManager, IWebHostEnvironment env)
+        public ProfileController(UserManager<ApplicationUser> userManager, IWebHostEnvironment env, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _env = env;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -58,14 +61,19 @@ namespace BrodcastSocialMedia.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProfileImage(ProfileIndexViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
 
             if (model.ProfileImage != null && model.ProfileImage.Length > 0)
             {
-                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
-                Directory.CreateDirectory(uploadsFolder);
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
 
                 var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ProfileImage.FileName);
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -79,7 +87,7 @@ namespace BrodcastSocialMedia.Controllers
                 await _userManager.UpdateAsync(user);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index");
         }
     }
 }

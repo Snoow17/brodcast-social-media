@@ -12,7 +12,7 @@
         {
             <div class="col">
                 <div class="card bg-dark bg-opacity-50 glass-card text-white shadow-lg border border-light rounded-4"
-                     role="button" onclick="loadUserModal('@user.Id', false)">
+                     role="button" onclick="loadUserModal('@user.Id', true)">
                     <div class="card-body d-flex align-items-center">
                         <img src="@user.ProfileImageUrl"
                              class="rounded-circle me-3 border border-secondary"
@@ -47,7 +47,7 @@
 
 @section Scripts {
     <script>
-        async function loadUserModal(userId) {
+        async function loadUserModal(userId, isExplorePage = false) {
             const modal = new bootstrap.Modal(document.getElementById("userModal"));
             const modalBody = document.getElementById("userModalBody");
             modalBody.innerHTML = "<p>Loading...</p>";
@@ -59,6 +59,16 @@
 
                 const html = await res.text();
                 modalBody.innerHTML = html;
+
+                if (isExplorePage) {
+                    // Create a "Go to Profile" button
+                    const profileBtn = document.createElement("a");
+                    profileBtn.href = `/Users/ShowUser?id=${userId}`;
+                    profileBtn.className = "btn btn-primary w-100 mt-3";
+                    profileBtn.innerText = "Go to Profile";
+                    modalBody.appendChild(profileBtn);
+                }
+
             } catch (err) {
                 console.error(err);
                 modalBody.innerHTML = '<p class="text-danger">Failed to load user details.</p>';

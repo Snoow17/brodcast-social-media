@@ -1,4 +1,3 @@
-/* Glass effect shared styles */
 .glass-effect {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -10,7 +9,6 @@
     transition: all 0.3s ease;
 }
 
-/* Fade In Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -23,7 +21,6 @@
     }
 }
 
-/* Body & HTML */
 html, body {
     height: 100%;
     margin: 0;
@@ -43,7 +40,6 @@ main {
     flex: 1;
 }
 
-/* Navbar */
 .custom-glass-navbar {
     position: fixed;
     width: 80%;
@@ -65,7 +61,6 @@ main {
     text-decoration: underline;
 }
 
-/* Inputs */
 .custom-input, textarea.form-control {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -86,7 +81,6 @@ textarea.form-control::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* Cards */
 .card, .new-broadcast-card {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -129,11 +123,6 @@ textarea.form-control::placeholder {
     color: black;
 }
 
-
-
-
-
-/* Modal */
 .modal-content {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -148,12 +137,10 @@ textarea.form-control::placeholder {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-/* Spacing */
 .mb-4 {
     margin-bottom: 1.5rem !important;
 }
 
-/* Media Query */
 @media (max-width: 768px) {
     .custom-glass-navbar {
         width: 95%;
@@ -172,7 +159,6 @@ textarea.form-control::placeholder {
     }
 }
 
-/* === Login Page Styling === */
 .login-page-container {
     display: flex;
     justify-content: center;
@@ -195,7 +181,6 @@ textarea.form-control::placeholder {
     transform: translateY(-10px);
 }
 
-/* Headings */
 .login-card h2 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
@@ -209,7 +194,6 @@ textarea.form-control::placeholder {
     margin-bottom: 1.5rem;
 }
 
-/* Form Fields */
 .login-card label {
     display: block;
     margin-bottom: 0.25rem;
@@ -238,7 +222,6 @@ textarea.form-control::placeholder {
      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
 }
 
-/* Checkbox */
 .login-card .form-check-label {
     color: rgba(255, 255, 255, 0.8);
 }
@@ -247,7 +230,6 @@ textarea.form-control::placeholder {
     accent-color: #0d6efd;
 }
 
-/* Button */
 .login-card button[type="submit"] {
     width: 100%;
     padding: 0.75rem;
@@ -269,7 +251,6 @@ textarea.form-control::placeholder {
     transform: translateY(0);
 }
 
-/* Links */
 .login-card .text-center a {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
@@ -281,7 +262,6 @@ textarea.form-control::placeholder {
     text-decoration: underline;
 }
 
-/* Profile Page Container */
 .collapse-section {
     max-height: 0;
     overflow: hidden;
@@ -334,7 +314,7 @@ textarea.form-control::placeholder {
 
 .custom-glass-footer {
     width: 80%;
-    margin: 2rem auto; /* centered footer using margin auto */
+    margin: 2rem auto;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
@@ -344,15 +324,31 @@ textarea.form-control::placeholder {
     color: #fff;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    text-align: center; /* center text inside */
+    text-align: center;
 }
 
-    .custom-glass-footer a {
-        color: black !important;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
+.custom-glass-footer a {
+    color: black !important;
+    text-decoration: none;
+    transition: color 0.3s;
+}
 
-        .custom-glass-footer a:hover {
-            text-decoration: underline;
-        }
+.custom-glass-footer a:hover {
+        text-decoration: underline;
+}
+
+.like-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-body {
+    position: relative;
+}
+
+.position-absolute.bottom-0.end-0 {
+    position: absolute !important;
+    bottom: 10px !important;
+    right: 15px !important;
+}
