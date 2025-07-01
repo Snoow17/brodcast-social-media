@@ -8,9 +8,6 @@ namespace BrodcastSocialMedia.ViewModels
         public List<BroadcastViewModel> Broadcasts { get; set; }
         public string Message { get; set; }
         public IFormFile? Image { get; set; } 
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public int LikeCount { get; set; }
-        public bool IsLikedByCurrentUser { get; set; }
+        
     }
 }

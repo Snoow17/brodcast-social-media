@@ -260,6 +260,9 @@ namespace BrodcastSocialMedia.Controllers
                     ImageUrl = x.Broadcast.ImageUrl,
                     Published = x.Broadcast.Published,
                     UserName = x.Broadcast.User.Name,
+                    ProfileImageUrl = string.IsNullOrEmpty(x.Broadcast.User.ProfileImageUrl)
+                            ? "/uploads/default-profile.png"
+                            : x.Broadcast.User.ProfileImageUrl,
                     LikeCount = x.LikeCount,
                     IsLikedByCurrentUser = x.Broadcast.Likes.Any(l => l.UserId == userId),
                     UserId = x.Broadcast.UserId
